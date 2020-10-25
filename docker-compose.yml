@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  mysql:
+    image: library/mysql:8.0.22
+    container_name: mysql_db
+    build: docker/db
+    ports:
+      - 3306:3306
+    hostname: dbserver
+    env_file:
+      - docker/db/.env
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./docker/db/data:/var/lib/db
+      - ./docker/db/my.cnf:/etc/db/conf.d/my.cnf

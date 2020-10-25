@@ -1,2 +1,6 @@
+# JetBrains
 .idea
-
+# Mysql Enviroment
+/docker/db/.env
+# Mysql Data
+/docker/db/data
