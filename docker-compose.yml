@@ -1,23 +1,25 @@
 version: '3.8'
 services:
-  mysql:
-    image: library/mysql:8.0.22
-    container_name: mysql_db
-    build: docker/db
+  # Mysql
+  db:
+    image: library/mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: docker_db
+      MYSQL_USER: docker_user
+      MYSQL_PASSWORD: docker_pass
     ports:
       - 3306:3306
-    hostname: dbserver
-    env_file:
-      - docker/db/.env
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      TZ: "Asia/Tokyo"
     volumes:
-      - ./docker/db/data:/var/lib/db
-      - ./docker/db/my.cnf:/etc/db/conf.d/my.cnf
-
+      - ./docker/db/data:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+  # Golang
   api:
     container_name: api_web
+    environment:
+      MYSQL_USER: docker_user
+      MYSQL_PASSWORD: docker_pass
+      MYSQL_DATABASE: docker_db
     build:
       context: .
       dockerfile: ./docker/api/Dockerfile
@@ -25,23 +27,19 @@ services:
       - ./api_v1:/go/src/api
     ports:
       - 8080:8080
-    links:
-      - mysql
-    depends_on:
-      - mysql
     tty: true
     command: fresh
 
-  front:
-    container_name: front
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
     depends_on:
-      - api
-    build:
-      context: .
-      dockerfile: ./docker/front/Dockerfile
+      - db
+    environment:
+      - PMA_ARBITRARY=1           # <= コメントアウトしていない場合はHOSTSの情報を入力する
+      - PMA_HOSTS=db
+#      - PMA_USER=docker_user     # <= コメントアウトするとログイン画面表示される
+#      - PMA_PASSWORD=docker_pass # <= コメントアウトするとログイン画面表示される
     ports:
-      - 3000:3000
+      - 8888:80
     volumes:
-      - ./docker/front:/front
-    tty: true
-    command: yarn dev
+      - ./docker/phpmyadmin/sessions:/sessions
