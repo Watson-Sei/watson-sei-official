@@ -43,3 +43,17 @@ services:
       - 8888:80
     volumes:
       - ./docker/phpmyadmin/sessions:/sessions
+
+  # frontend Nuxt.js
+  nuxt:
+    build:
+      context: .
+      dockerfile: ./docker/front/Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./docker/front:/app
+      - /app/node_modules
+    tty: true
+    working_dir: /app
+    command: yarn dev
