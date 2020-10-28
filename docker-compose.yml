@@ -13,9 +13,10 @@ services:
     volumes:
       - ./docker/db/data:/var/lib/mysql
       - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    expose:
+      - 3306
   # Golang
   api:
-    container_name: api_web
     environment:
       MYSQL_USER: docker_user
       MYSQL_PASSWORD: docker_pass
@@ -27,6 +28,8 @@ services:
       - ./api_v1:/go/src/api
     ports:
       - 8080:8080
+    depends_on:
+      - db
     tty: true
     command: fresh
 
@@ -54,6 +57,8 @@ services:
     volumes:
       - ./docker/front:/app
       - /app/node_modules
+    depends_on:
+      - db
     tty: true
     working_dir: /app
     command: yarn dev

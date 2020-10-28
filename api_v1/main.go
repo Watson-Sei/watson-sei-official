@@ -36,6 +36,7 @@ func Initdb() (*gorm.DB, error) {
 }
 
 func main() {
+	gin.SetMode(gin.DebugMode)
 	router := gin.Default()
 	Initdb()
 	router.GET("/", func(context *gin.Context) {

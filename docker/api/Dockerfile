@@ -13,3 +13,5 @@ RUN apk update \
   && go get -u github.com/jinzhu/gorm \
   && go get -u github.com/jinzhu/gorm/dialects/mysql \
   && go get -u github.com/pilu/fresh
+
+EXPOSE 8080
