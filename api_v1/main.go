@@ -44,5 +44,10 @@ func main() {
 			"message": "hello world",
 		})
 	})
+	router.GET("/about", func(context *gin.Context) {
+		context.JSON(http.StatusOK, gin.H{
+			"message": "About",
+		})
+	})
 	router.Run(":8080")
 }
