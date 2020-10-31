@@ -5,7 +5,7 @@ services:
     image: library/mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: docker_db
+      MYSQL_DATABASE: watson_db
       MYSQL_USER: docker_user
       MYSQL_PASSWORD: docker_pass
     ports:
@@ -15,12 +15,14 @@ services:
       - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
     expose:
       - 3306
+    security_opt:
+      - seccomp:unconfined
   # Golang
   api:
     environment:
       MYSQL_USER: docker_user
       MYSQL_PASSWORD: docker_pass
-      MYSQL_DATABASE: docker_db
+      MYSQL_DATABASE: watson_db
     build:
       context: .
       dockerfile: ./docker/api/Dockerfile
@@ -39,7 +41,7 @@ services:
       - db
     environment:
       - PMA_ARBITRARY=1           # <= コメントアウトしていない場合はHOSTSの情報を入力する
-      - PMA_HOSTS=db
+      - PMA_HOSTS=Models
 #      - PMA_USER=docker_user     # <= コメントアウトするとログイン画面表示される
 #      - PMA_PASSWORD=docker_pass # <= コメントアウトするとログイン画面表示される
     ports:
