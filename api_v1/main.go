@@ -1,11 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
-	"net/http"
-	"os"
 	"time"
 
+	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
+	"github.com/Watson-Sei/watson-sei-official/api_v1/Models"
+	"github.com/Watson-Sei/watson-sei-official/api_v1/Routes"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -14,14 +16,8 @@ import (
 var err error
 var count = 0
 
-func Initdb() (*gorm.DB, error) {
-	DBMS := "mysql"
-	USER := os.Getenv("MYSQL_USER")
-	PASS := os.Getenv("MYSQL_PASSWORD")
-	PROTOCOL := "tcp(db)"
-	DBNAME := "docker_db"
-	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
-	db, err := gorm.Open(DBMS, CONNECT)
+func connection() *gorm.DB {
+	Config.DB, err = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
 	if err != nil {
 		log.Println("Not ready, Retry connecting...")
 		time.Sleep(time.Second)
@@ -30,24 +26,23 @@ func Initdb() (*gorm.DB, error) {
 		if count > 30 {
 			panic(err)
 		}
-		return Initdb()
+		return connection()
 	}
-	return db, nil
+	return Config.DB
 }
 
 func main() {
 	gin.SetMode(gin.DebugMode)
-	router := gin.Default()
-	Initdb()
-	router.GET("/", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{
-			"message": "hello world",
-		})
-	})
-	router.GET("/about", func(context *gin.Context) {
-		context.JSON(http.StatusOK, gin.H{
-			"message": "About",
-		})
-	})
+	connection()
+	Config.DB, err = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	if err != nil {
+		fmt.Println("Status: ", err)
+	}
+	defer Config.DB.Close()
+	// Migrate
+	Config.DB.AutoMigrate(&Models.Article{})
+
+	router := Routes.SetupRouter()
+	// running
 	router.Run(":8080")
 }
