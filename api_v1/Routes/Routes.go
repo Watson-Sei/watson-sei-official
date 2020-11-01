@@ -11,5 +11,6 @@ func SetupRouter() *gin.Engine {
 	router.POST("/create", Controllers.CreateArticle)
 	router.GET("/:id", Controllers.GetArticleByID)
 	router.PUT("/:id", Controllers.UpdateArticle)
+	router.DELETE("/:id", Controllers.DeleteArticle)
 	return router
 }

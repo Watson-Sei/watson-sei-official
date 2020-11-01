@@ -60,3 +60,15 @@ func UpdateArticle(context *gin.Context) {
 		context.JSON(http.StatusOK, article)
 	}
 }
+
+// DeleteArticle ... Delete the article
+func DeleteArticle(context *gin.Context) {
+	var article Models.Article
+	id := context.Params.ByName("id")
+	err := Models.DeleteArticle(&article, id)
+	if err != nil {
+		context.AbortWithStatus(http.StatusNotFound)
+	} else {
+		context.JSON(http.StatusOK, gin.H{"id" + id: "is deleted"})
+	}
+}

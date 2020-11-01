@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
-import _ "github.com/jinzhu/gorm/dialects/mysql"
 
 // GetAllArticles Fetch all article data
 func GetAllArticle(article *[]Article) (err error) {
@@ -35,5 +35,11 @@ func GetArticleByID(article *Article, id string) (err error) {
 func UpdateArticle(article *Article, id string) (err error) {
 	fmt.Println(article)
 	Config.DB.Save(article)
+	return nil
+}
+
+// DeleteArticle ... Delete article
+func DeleteArticle(article *Article, id string) (err error) {
+	Config.DB.Where("id = ?", id).Delete(article)
 	return nil
 }
