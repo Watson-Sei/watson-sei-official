@@ -8,5 +8,6 @@ import (
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.GET("/", Controllers.GetArticle)
+	router.POST("/create", Controllers.CreateArticle)
 	return router
 }
