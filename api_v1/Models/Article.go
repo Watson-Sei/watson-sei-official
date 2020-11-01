@@ -1,6 +1,10 @@
 package Models
 
-import "github.com/Watson-Sei/watson-sei-official/api_v1/Config"
+import (
+	"fmt"
+
+	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
+)
 import _ "github.com/jinzhu/gorm/dialects/mysql"
 
 // GetAllArticles Fetch all article data
@@ -27,3 +31,9 @@ func GetArticleByID(article *Article, id string) (err error) {
 	return nil
 }
 
+// UpdateArticle ... Update article
+func UpdateArticle(article *Article, id string) (err error) {
+	fmt.Println(article)
+	Config.DB.Save(article)
+	return nil
+}

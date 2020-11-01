@@ -43,3 +43,20 @@ func GetArticleByID(context *gin.Context) {
 		context.JSON(http.StatusOK, article)
 	}
 }
+
+// UpdateArticle ... Update the article information
+func UpdateArticle(context *gin.Context) {
+	var article Models.Article
+	id := context.Params.ByName("id")
+	err := Models.GetArticleByID(&article, id)
+	if err != nil {
+		context.JSON(http.StatusNotFound, article)
+	}
+	context.BindJSON(&article)
+	err = Models.UpdateArticle(&article, id)
+	if err != nil {
+		context.AbortWithStatus(http.StatusNotFound)
+	} else {
+		context.JSON(http.StatusOK, article)
+	}
+}

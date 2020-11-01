@@ -10,5 +10,6 @@ func SetupRouter() *gin.Engine {
 	router.GET("/", Controllers.GetArticle)
 	router.POST("/create", Controllers.CreateArticle)
 	router.GET("/:id", Controllers.GetArticleByID)
+	router.PUT("/:id", Controllers.UpdateArticle)
 	return router
 }
