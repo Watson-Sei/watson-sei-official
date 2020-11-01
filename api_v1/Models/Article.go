@@ -1,7 +1,11 @@
 package Models
 
-import "github.com/Watson-Sei/watson-sei-official/api_v1/Config"
-import _ "github.com/jinzhu/gorm/dialects/mysql"
+import (
+	"fmt"
+
+	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+)
 
 // GetAllArticles Fetch all article data
 func GetAllArticle(article *[]Article) (err error) {
@@ -19,3 +23,23 @@ func CreateArticle(article *Article) (err error) {
 	return nil
 }
 
+// GetArticleByID ... Fetch only one article by Id
+func GetArticleByID(article *Article, id string) (err error) {
+	if err = Config.DB.Where("id = ?", id).First(article).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+// UpdateArticle ... Update article
+func UpdateArticle(article *Article, id string) (err error) {
+	fmt.Println(article)
+	Config.DB.Save(article)
+	return nil
+}
+
+// DeleteArticle ... Delete article
+func DeleteArticle(article *Article, id string) (err error) {
+	Config.DB.Where("id = ?", id).Delete(article)
+	return nil
+}
