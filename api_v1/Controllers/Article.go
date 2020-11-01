@@ -31,3 +31,15 @@ func CreateArticle(context *gin.Context) {
 		context.JSON(http.StatusOK, article)
 	}
 }
+
+// GetArticleByID ... Get the article by id
+func GetArticleByID(context *gin.Context) {
+	id := context.Params.ByName("id")
+	var article Models.Article
+	err := Models.GetArticleByID(&article, id)
+	if err != nil {
+		context.AbortWithStatus(http.StatusNotFound)
+	} else {
+		context.JSON(http.StatusOK, article)
+	}
+}

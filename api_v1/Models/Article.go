@@ -19,3 +19,11 @@ func CreateArticle(article *Article) (err error) {
 	return nil
 }
 
+// GetArticleByID ... Fetch only one article by Id
+func GetArticleByID(article *Article, id string) (err error) {
+	if err = Config.DB.Where("id = ?", id).First(article).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
