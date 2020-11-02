@@ -36,24 +36,3 @@ func DbURL(dbConfig *DBConfig) string {
 		dbConfig.DBName,
 	)
 }
-
-//func Initdb() *gorm.DB {
-//	DBMS := "mysql"
-//	USER := os.Getenv("MYSQL_USER")
-//	PASS := os.Getenv("MYSQL_PASSWORD")
-//	PROTOCOL := "tcp(db)"
-//	DBNAME := os.Getenv("MYSQL_DATABASE")
-//	CONNECT := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME
-//	db, err := gorm.Open(DBMS, CONNECT)
-//	if err != nil {
-//		log.Println("Not ready, Retry Connecting...")
-//		time.Sleep(time.Second)
-//		count++
-//		log.Println(count)
-//		if count > 30 {
-//			panic(err)
-//		}
-//		return Initdb()
-//	}
-//	return db
-//}
