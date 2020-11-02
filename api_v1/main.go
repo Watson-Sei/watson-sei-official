@@ -40,7 +40,7 @@ func main() {
 	}
 	defer Config.DB.Close()
 	// Migrate
-	Config.DB.AutoMigrate(&Models.Article{})
+	Config.DB.AutoMigrate(&Models.Article{}, &Models.User{})
 
 	router := Routes.SetupRouter()
 	// running
