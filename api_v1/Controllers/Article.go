@@ -51,6 +51,7 @@ func UpdateArticle(context *gin.Context) {
 	err := Models.GetArticleByID(&article, id)
 	if err != nil {
 		context.JSON(http.StatusNotFound, article)
+		return
 	}
 	context.BindJSON(&article)
 	err = Models.UpdateArticle(&article, id)
