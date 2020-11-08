@@ -3,11 +3,8 @@ services:
   # Mysql
   db:
     image: library/mysql:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: watson_db
-      MYSQL_USER: docker_user
-      MYSQL_PASSWORD: docker_pass
+    env_file:
+      - ./docker/db/.env
     ports:
       - 3306:3306
     volumes:
@@ -19,10 +16,8 @@ services:
       - seccomp:unconfined
   # Golang
   api:
-    environment:
-      MYSQL_USER: docker_user
-      MYSQL_PASSWORD: docker_pass
-      MYSQL_DATABASE: watson_db
+    env_file:
+      - ./docker/db/.env
     build:
       context: .
       dockerfile: ./docker/api/Dockerfile
