@@ -9,7 +9,9 @@ import (
 
 // GetAllArticles Fetch all article data
 func GetAllArticle(article *[]Article) (err error) {
-	if err = Config.DB.Find(article).Error; err != nil {
+	db := Config.DbConnect()
+	defer db.Close()
+	if err = db.Find(article).Error; err != nil {
 		return err
 	}
 	return nil
@@ -17,7 +19,9 @@ func GetAllArticle(article *[]Article) (err error) {
 
 // CreateArticle ... Insert New data
 func CreateArticle(article *Article) (err error) {
-	if err = Config.DB.Create(article).Error; err != nil {
+	db := Config.DbConnect()
+	defer db.Close()
+	if err = db.Create(article).Error; err != nil {
 		return err
 	}
 	return nil
@@ -25,7 +29,9 @@ func CreateArticle(article *Article) (err error) {
 
 // GetArticleByID ... Fetch only one article by Id
 func GetArticleByID(article *Article, id string) (err error) {
-	if err = Config.DB.Where("id = ?", id).First(article).Error; err != nil {
+	db := Config.DbConnect()
+	defer db.Close()
+	if err = db.Where("id = ?", id).First(article).Error; err != nil {
 		return err
 	}
 	return nil
@@ -33,13 +39,17 @@ func GetArticleByID(article *Article, id string) (err error) {
 
 // UpdateArticle ... Update article
 func UpdateArticle(article *Article, id string) (err error) {
+	db := Config.DbConnect()
+	defer db.Close()
 	fmt.Println(article)
-	Config.DB.Save(article)
+	db.Save(article)
 	return nil
 }
 
 // DeleteArticle ... Delete article
 func DeleteArticle(article *Article, id string) (err error) {
-	Config.DB.Where("id = ?", id).Delete(article)
+	db := Config.DbConnect()
+	defer db.Close()
+	db.Where("id = ?", id).Delete(article)
 	return nil
 }

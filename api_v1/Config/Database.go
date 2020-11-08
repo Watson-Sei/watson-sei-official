@@ -2,13 +2,16 @@ package Config
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
 
 var DB *gorm.DB
 var count = 0
+var SECRETKEY = os.Getenv("SECRETKEY")
 
 // DBConfig represents db configuration
 type DBConfig struct {
@@ -35,4 +38,19 @@ func DbURL(dbConfig *DBConfig) string {
 		dbConfig.Host,
 		dbConfig.DBName,
 	)
+}
+
+func DbConnect() *gorm.DB {
+	db, err := gorm.Open("mysql", DbURL(BuildDBConfig()))
+	if err != nil {
+		log.Println("Not ready, Retry connecting...")
+		time.Sleep(time.Second)
+		count++
+		log.Println(count)
+		if count > 30 {
+			panic(err)
+		}
+		return DbConnect()
+	}
+	return db
 }
