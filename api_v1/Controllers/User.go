@@ -3,28 +3,46 @@ package Controllers
 import (
 	"net/http"
 
+	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Models"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func SignupGet(context *gin.Context) {
-	context.HTML(200, "signup.html", gin.H{})
+// ユーザー登録
+func SignupPost(context *gin.Context)  {
+	var user Models.User
+	if err := context.Bind(&user); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"err":err})
+		return
+	} else {
+		err := Models.CreateUser(user.Username, user.Password)
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"err":err})
+			return
+		} else {
+			context.JSON(http.StatusOK, gin.H{"message":"signup success"})
+		}
+	}
 }
 
-func SignupPost(context *gin.Context) {
-	var form Models.User
-	// バリデーション処理
-	if err := context.Bind(&form); err != nil {
-		context.HTML(http.StatusBadRequest, "signup.html", gin.H{"err":err})
-		context.Abort()
+// ログイン関数
+func LoginPost(context *gin.Context)  {
+	var user Models.User
+	if err := context.Bind(&user); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"err":err})
+		return
 	} else {
-		username := context.PostForm("username")
-		password := context.PostForm("password")
-		// 登録ユーザーが重複していた場合に弾く処理
-		err := Models.CreateUser(username, password)
-		if err != nil {
-			context.HTML(http.StatusBadRequest, "signup.html", gin.H{"err":err})
+		db := Config.DbConnect()
+		loginUser := user.Username
+		loginPassword := user.Password
+		db.Find(&Models.User{}, "username =?", loginUser).Scan(&user)
+		if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginPassword)); err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"err":err, "login": loginUser})
+			return
 		}
-		context.Redirect(302, "/")
+		context.JSON(http.StatusOK, gin.H{
+			"token": Models.CreateJWTToken(user.Username),
+		})
 	}
 }
