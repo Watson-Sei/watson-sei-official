@@ -1,7 +1,7 @@
 package Middleware
 
 import (
-	"fmt"
+	"net/http"
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
 	"github.com/dgrijalva/jwt-go"
@@ -19,10 +19,12 @@ func JWTChecker() gin.HandlerFunc {
 
 		if err == nil {
 			claims := token.Claims.(jwt.MapClaims)
-			msg := fmt.Sprintf("こんにちは、「%s」: token = %s", claims["username"], token)
-			context.JSON(200, gin.H{"message":msg})
+			context.Set("username", claims["username"])
+			context.Set("exp", claims["exp"])
+			context.Set("token", token.Raw)
+			context.Next()
 		} else {
-			context.JSON(401, gin.H{"err": fmt.Sprint(err)})
+			context.JSON(http.StatusUnauthorized, gin.H{"err":err})
 			context.Abort()
 		}
 	}

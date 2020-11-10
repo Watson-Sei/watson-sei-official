@@ -21,7 +21,7 @@ func SetupRouter() *gin.Engine {
 	{
 		admin.POST("/signup", Controllers.SignupPost)
 		admin.POST("/login", Controllers.LoginPost)
-		admin.POST("/logout", Controllers.LogoutPost)
+		admin.POST("/logout", Middleware.JWTChecker(), Controllers.LogoutPost)
 		admin.GET("/main", Middleware.JWTChecker(), Controllers.Main)
 	}
 	return router
