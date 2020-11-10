@@ -19,7 +19,7 @@ func JWTChecker() gin.HandlerFunc {
 
 		if err == nil {
 			claims := token.Claims.(jwt.MapClaims)
-			msg := fmt.Sprintf("こんにちは、「%s」", claims["username"])
+			msg := fmt.Sprintf("こんにちは、「%s」: token = %s", claims["username"], token)
 			context.JSON(200, gin.H{"message":msg})
 		} else {
 			context.JSON(401, gin.H{"err": fmt.Sprint(err)})

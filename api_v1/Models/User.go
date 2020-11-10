@@ -1,10 +1,12 @@
 package Models
 
 import (
+	"log"
 	"time"
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gomodule/redigo/redis"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -40,3 +42,14 @@ func CreateJWTToken(username string) string {
 		return "token生成に失敗しました"
 	}
 }
+
+// Redis JWT Token Black List Register
+func BlackListSet(key, value string, c redis.Conn) string {
+	res, err := redis.String(c.Do("SET", key, value))
+	if err != nil {
+		log.Println(err)
+	}
+	return res
+}
+
+// Redis JWT Token Black List Get
