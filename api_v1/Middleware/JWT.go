@@ -17,9 +17,9 @@ func JWTChecker() gin.HandlerFunc {
 			return b, nil
 		})
 
+		// トークンが有効
 		if err == nil {
 			claims := token.Claims.(jwt.MapClaims)
-			context.Set("username", claims["username"])
 			context.Set("exp", claims["exp"])
 			context.Set("token", token.Raw)
 			context.Next()

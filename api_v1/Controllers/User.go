@@ -48,11 +48,24 @@ func LoginPost(context *gin.Context)  {
 }
 
 // Logout
+type UserJWT struct {
+	token	string	`json:"token" biding:"required"`
+}
+
 func LogoutPost(context *gin.Context)  {
-	err := Models.BlackListSet(context.MustGet("exp").(int))
-	if err != nil {
+	var userJwt UserJWT
+	if err := context.Bind(&userJwt); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
-		context.Abort()
+		return
+	} else {
+		exp := context.MustGet("exp").(float64)
+		token := context.MustGet("token").(string)
+		err := Models.BlackListSet(int64(exp), token)
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"err":err})
+			context.Abort()
+		} else {
+			context.JSON(http.StatusOK, gin.H{"message":"Logout成功しました"})
+		}
 	}
-	context.JSON(http.StatusOK, gin.H{})
 }

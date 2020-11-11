@@ -41,26 +41,22 @@ func CreateJWTToken(username string) string {
 	}
 }
 
-// Logout
-type UserJWT struct {
-	token	string	`json:"token" biding:"required"`
-}
 
 // Redis JWT Token Black List Register
-func BlackListSet(exp int) error {
-	var userJwt UserJWT
+func BlackListSet(exp int64, token string) error {
 	conn := Config.RedisConnection()
 	defer conn.Close()
 
 	// 残り時間
 	nowTime := time.Now()
-	finishTime := time.Unix(int64(exp), 0)
+	expTime := time.Unix(exp, 0)
 
-	timeLeft := finishTime.Sub(nowTime)
+	// 残り時間秒数
+	timeLeft := expTime.Sub(nowTime).Seconds()
 
-	// 要素追加
-	_, err := conn.Do("SET", userJwt.token, exp)
-	_, err = conn.Do("EXPIRE", timeLeft)
+	// Redis DBに追加
+	_, err := conn.Do("SET", token, string(exp))
+	_, err = conn.Do("EXPIRE", token, int64(timeLeft))
 	if err != nil {
 		return err
 	}
