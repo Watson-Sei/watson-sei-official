@@ -8,3 +8,5 @@
 api_v1/tmp
 # Nuxt.js .gitignore
 /docker/front/.git
+# redis
+/docker/redis/data

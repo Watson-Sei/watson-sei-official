@@ -31,7 +31,7 @@ func BuildDBConfig() *DBConfig {
 	return &dbConfig
 }
 
-func DbURL(dbConfig *DBConfig) string {
+func DBUrl(dbConfig *DBConfig) string {
 	return fmt.Sprintf("%s:%s@%s/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		dbConfig.User,
 		dbConfig.Password,
@@ -40,8 +40,8 @@ func DbURL(dbConfig *DBConfig) string {
 	)
 }
 
-func DbConnect() *gorm.DB {
-	db, err := gorm.Open("mysql", DbURL(BuildDBConfig()))
+func DBConnect() *gorm.DB {
+	db, err := gorm.Open("mysql", DBUrl(BuildDBConfig()))
 	if err != nil {
 		log.Println("Not ready, Retry connecting...")
 		time.Sleep(time.Second)
@@ -50,7 +50,7 @@ func DbConnect() *gorm.DB {
 		if count > 30 {
 			panic(err)
 		}
-		return DbConnect()
+		return DBConnect()
 	}
 	return db
 }

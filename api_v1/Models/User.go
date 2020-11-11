@@ -5,12 +5,13 @@ import (
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gomodule/redigo/redis"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"golang.org/x/crypto/bcrypt"
 )
 
 func CreateUser(username string, password string) (err error) {
-	db := Config.DbConnect()
+	db := Config.DBConnect()
 	defer db.Close()
 	hash, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
 	// insert処理
@@ -39,4 +40,38 @@ func CreateJWTToken(username string) string {
 	} else {
 		return "token生成に失敗しました"
 	}
+}
+
+
+// Redis JWT Token Black List Register
+func BlackListSet(exp int64, token string) error {
+	conn := Config.RedisConnection()
+	defer conn.Close()
+
+	// 残り時間
+	nowTime := time.Now()
+	expTime := time.Unix(exp, 0)
+
+	// 残り時間秒数
+	timeLeft := expTime.Sub(nowTime).Seconds()
+
+	// Redis DBに追加
+	_, err := conn.Do("SET", token, string(exp))
+	_, err = conn.Do("EXPIRE", token, int64(timeLeft))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
+// BlackListChecker
+func BlackListChecker(token string) error {
+	conn := Config.RedisConnection()
+	defer conn.Close()
+	_, err := redis.String(conn.Do("GET", token))
+	if err != nil {
+		return err
+	}
+	return nil
 }

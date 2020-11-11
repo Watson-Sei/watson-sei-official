@@ -1,9 +1,10 @@
 package Middleware
 
 import (
-	"fmt"
+	"net/http"
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
+	"github.com/Watson-Sei/watson-sei-official/api_v1/Models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gin-gonic/gin"
@@ -17,12 +18,20 @@ func JWTChecker() gin.HandlerFunc {
 			return b, nil
 		})
 
+		// トークンが有効
 		if err == nil {
-			claims := token.Claims.(jwt.MapClaims)
-			msg := fmt.Sprintf("こんにちは、「%s」", claims["username"])
-			context.JSON(200, gin.H{"message":msg})
+			err := Models.BlackListChecker(token.Raw)
+			if err == nil {
+				context.JSON(http.StatusBadRequest, gin.H{"err": "トークンは無効です。"})
+				return
+			} else {
+				claims := token.Claims.(jwt.MapClaims)
+				context.Set("exp", claims["exp"])
+				context.Set("token", token.Raw)
+				context.Next()
+			}
 		} else {
-			context.JSON(401, gin.H{"err": fmt.Sprint(err)})
+			context.JSON(http.StatusUnauthorized, gin.H{"err":err})
 			context.Abort()
 		}
 	}

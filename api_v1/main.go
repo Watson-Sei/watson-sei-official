@@ -12,7 +12,7 @@ var err error
 
 func main() {
 	gin.SetMode(gin.DebugMode)
-	db := Config.DbConnect()
+	db := Config.DBConnect()
 	defer db.Close()
 	// Migrate
 	db.AutoMigrate(&Models.Article{}, &Models.User{})
