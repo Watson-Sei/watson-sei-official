@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
+	"github.com/Watson-Sei/watson-sei-official/api_v1/Models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gin-gonic/gin"
@@ -19,10 +20,16 @@ func JWTChecker() gin.HandlerFunc {
 
 		// トークンが有効
 		if err == nil {
-			claims := token.Claims.(jwt.MapClaims)
-			context.Set("exp", claims["exp"])
-			context.Set("token", token.Raw)
-			context.Next()
+			err := Models.BlackListChecker(token.Raw)
+			if err == nil {
+				context.JSON(http.StatusBadRequest, gin.H{"err": "トークンは無効です。"})
+				return
+			} else {
+				claims := token.Claims.(jwt.MapClaims)
+				context.Set("exp", claims["exp"])
+				context.Set("token", token.Raw)
+				context.Next()
+			}
 		} else {
 			context.JSON(http.StatusUnauthorized, gin.H{"err":err})
 			context.Abort()

@@ -5,6 +5,7 @@ import (
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gomodule/redigo/redis"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -63,3 +64,14 @@ func BlackListSet(exp int64, token string) error {
 	return nil
 }
 
+
+// BlackListChecker
+func BlackListChecker(token string) error {
+	conn := Config.RedisConnection()
+	defer conn.Close()
+	_, err := redis.String(conn.Do("GET", token))
+	if err != nil {
+		return err
+	}
+	return nil
+}
