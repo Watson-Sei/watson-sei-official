@@ -21,6 +21,17 @@ func CreateUser(username string, password string) (err error) {
 	return nil
 }
 
+func PasswordChecker(username string, password string) (err error) {
+	var user User
+	db := Config.DBConnect()
+	defer db.Close()
+	db.Find(&User{}, "username =?", username).Scan(&user)
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return err
+	}
+	return nil
+}
+
 func CreateJWTToken(username string) string {
 	/*
 	アルゴリズム指定
