@@ -3,10 +3,8 @@ package Controllers
 import (
 	"net/http"
 
-	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Models"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // ユーザー登録
@@ -33,16 +31,12 @@ func LoginPost(context *gin.Context)  {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
 		return
 	} else {
-		db := Config.DBConnect()
-		loginUser := user.Username
-		loginPassword := user.Password
-		db.Find(&Models.User{}, "username =?", loginUser).Scan(&user)
-		if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginPassword)); err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"err":err, "login": loginUser})
+		if err := Models.PasswordChecker(user.Username, user.Password); err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"err":err})
 			return
 		}
 		context.JSON(http.StatusOK, gin.H{
-			"token": Models.CreateJWTToken(user.Username),
+			"token":Models.CreateJWTToken(user.Username),
 		})
 	}
 }

@@ -8,7 +8,6 @@ import (
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
-	router.LoadHTMLGlob("Templates/*.html")
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/", Controllers.GetArticle)
