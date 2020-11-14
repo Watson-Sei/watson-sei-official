@@ -10,11 +10,11 @@ func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	v1 := router.Group("/v1")
 	{
-		v1.GET("/", Controllers.GetArticle)
-		v1.POST("/create", Controllers.CreateArticle)
-		v1.GET("/:id", Controllers.GetArticleByID)
-		v1.PUT("/:id", Controllers.UpdateArticle)
-		v1.DELETE("/:id", Controllers.DeleteArticle)
+		v1.GET("/user/list", Controllers.GetArticle)
+		v1.POST("/user/create", Middleware.JWTChecker(), Controllers.CreateArticle)
+		v1.GET("/user/detail/:id", Controllers.GetArticleByID)
+		v1.PUT("/user/update/:id", Middleware.JWTChecker(), Controllers.UpdateArticle)
+		v1.DELETE("/user/delete/:id", Middleware.JWTChecker(), Controllers.DeleteArticle)
 	}
 	admin := router.Group("/admin")
 	{
