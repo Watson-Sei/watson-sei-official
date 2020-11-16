@@ -10,3 +10,7 @@ api_v1/tmp
 /docker/front/.git
 # redis
 /docker/redis/data
+# ssl
+ssl
+# .DS
+.DS_Store
