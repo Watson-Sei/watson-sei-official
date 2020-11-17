@@ -23,7 +23,7 @@ func JWTChecker() gin.HandlerFunc {
 			err := Models.BlackListChecker(token.Raw)
 			if err == nil {
 				context.JSON(http.StatusBadRequest, gin.H{"err": "トークンは無効です。"})
-				return
+				context.Abort()
 			} else {
 				claims := token.Claims.(jwt.MapClaims)
 				context.Set("exp", claims["exp"])

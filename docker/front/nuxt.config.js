@@ -35,6 +35,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    { src: '~/plugins/axios.js', ssr: false }
   ],
   /*
   ** Auto import components
@@ -50,11 +51,37 @@ export default {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth',
+    '@nuxtjs/vuetify'
   ],
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+  },
+  axios: {
+    baseURL: 'https://localhost/api'
+  },
+  auth: {
+    redirect: {
+      login: '/login',
+      logout: '/login',
+      callback: false,
+      home: '/'
+    },
+    strategies: {
+      local: {
+        endpoints: {
+          login: {url: '/admin/login', method: 'post', propertyName: 'token'},
+          logout: {url: '/admin/logout', method: 'get', propertyName: false},
+          user: false
+        }
+      }
+    }
+  },
+  router: {
+    middleware: ['auth']
   }
 }
