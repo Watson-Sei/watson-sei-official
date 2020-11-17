@@ -35,7 +35,6 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
-    { src: '~/plugins/axios.js', ssr: false }
   ],
   /*
   ** Auto import components
@@ -74,7 +73,7 @@ export default {
     strategies: {
       local: {
         endpoints: {
-          login: {url: '/admin/login', method: 'post', propertyName: 'token'},
+          login: {url: '/admin/login', method: 'post', propertyName: false},
           logout: {url: '/admin/logout', method: 'get', propertyName: false},
           user: false
         }
