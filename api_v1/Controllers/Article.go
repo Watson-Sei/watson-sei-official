@@ -73,3 +73,16 @@ func DeleteArticle(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{"id" + id: "is deleted"})
 	}
 }
+
+// 画像アップロード
+func UploadImage(context *gin.Context)  {
+	form, _ := context.MultipartForm()
+	file := form.File["file"][0]
+	uuid := context.PostForm("uuid")
+	err := context.SaveUploadedFile(file, "assets/" + uuid + ".png")
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"err":err.Error()})
+		context.Abort()
+	}
+	context.JSON(http.StatusOK, gin.H{"url": "assets/" + uuid + ".png"})
+}

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@nuxtjs/axios": "^5.12.2",
+    "uuid": "^8.3.1",
+    "uuidv4": "^6.2.5"
+  }
+}

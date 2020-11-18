@@ -35,6 +35,7 @@ export default {
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    { src: '@/plugins/editor.js', mode: 'client' },
   ],
   /*
   ** Auto import components
@@ -65,10 +66,10 @@ export default {
   },
   auth: {
     redirect: {
-      login: '/login',
-      logout: '/login',
+      login: '/admin/login',
+      logout: '/admin/login',
       callback: false,
-      home: '/'
+      home: '/admin'
     },
     strategies: {
       local: {

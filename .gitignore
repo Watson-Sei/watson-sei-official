@@ -14,3 +14,5 @@ api_v1/tmp
 ssl
 # .DS
 .DS_Store
+# static server
+/api_v1/assets

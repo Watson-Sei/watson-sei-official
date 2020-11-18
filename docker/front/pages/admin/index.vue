@@ -1,13 +1,13 @@
 <template>
-  <h1>Main Page</h1>
+  <h1>管理画面Main</h1>
 </template>
 
 <script>
 export default {
-  auth: false,
+  name: "index",
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

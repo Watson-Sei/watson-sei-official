@@ -15,6 +15,7 @@ func SetupRouter() *gin.Engine {
 		v1.GET("/user/detail/:id", Controllers.GetArticleByID)
 		v1.PUT("/user/update/:id", Middleware.JWTChecker(), Controllers.UpdateArticle)
 		v1.DELETE("/user/delete/:id", Middleware.JWTChecker(), Controllers.DeleteArticle)
+		v1.POST("/upload/image", Controllers.UploadImage)
 	}
 	admin := router.Group("/admin")
 	{
