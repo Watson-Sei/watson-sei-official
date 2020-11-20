@@ -1,6 +1,7 @@
 package Routes
 
 import (
+	"github.com/Watson-Sei/jwt-gin/api_v1/middleware"
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Controllers"
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Middleware"
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,7 @@ func SetupRouter() *gin.Engine {
 		admin.POST("/signup", Controllers.SignupPost)
 		admin.POST("/login", Controllers.LoginPost)
 		admin.GET("/logout", Middleware.JWTChecker(), Controllers.LogoutPost)
+		admin.GET("/refresh", middleware.RefreshChecker(), Controllers.RefreshGet)
 		admin.GET("/main", Middleware.JWTChecker(), Controllers.Main)
 	}
 	return router

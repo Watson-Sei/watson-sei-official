@@ -11,7 +11,8 @@ import (
 
 var DB *gorm.DB
 var count = 0
-var SECRETKEY = os.Getenv("SECRETKEY")
+var ACCESS_TOKEN_SECRETKEY = os.Getenv("ACCESS_TOKEN_SECRETKEY")
+var REFRESH_TOKEN_SECRETKEY = os.Getenv("REFRESH_TOKEN_SECRETKEY")
 
 // DBConfig represents db configuration
 type DBConfig struct {

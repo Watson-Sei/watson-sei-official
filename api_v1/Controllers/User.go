@@ -35,9 +35,12 @@ func LoginPost(context *gin.Context)  {
 			context.JSON(http.StatusBadRequest, gin.H{"err":err})
 			return
 		}
-		context.JSON(http.StatusOK, gin.H{
-			"token":Models.CreateJWTToken(user.Username),
-		})
+		tokens, err := Models.CreateJWTToken(user.Username, user.ID)
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"err":err})
+			return
+		}
+		context.JSON(http.StatusOK, tokens)
 	}
 }
 
@@ -51,5 +54,19 @@ func LogoutPost(context *gin.Context)  {
 		context.Abort()
 	} else {
 		context.JSON(http.StatusOK, gin.H{"message":"Logout成功しました"})
+	}
+}
+
+// Token Refresh
+func RefreshGet(context *gin.Context)  {
+	userId := context.MustGet("userId").(float64)
+	refreshToken := context.MustGet("token").(string)
+	exp := context.MustGet("exp").(float64)
+	tokens, err := Models.RefreshJWTToken(uint(userId), refreshToken, int64(exp))
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"err":err})
+		context.Abort()
+	} else {
+		context.JSON(http.StatusOK, tokens)
 	}
 }

@@ -15,7 +15,7 @@ func CreateUser(username string, password string) (err error) {
 	defer db.Close()
 	hash, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
 	// insert処理
-	if err := db.Create(&User{username,string(hash)}).Error; err != nil {
+	if err := db.Create(&User{Username: username,Password: string(hash)}).Error; err != nil {
 		return err
 	}
 	return nil
@@ -32,7 +32,7 @@ func PasswordChecker(username string, password string) (err error) {
 	return nil
 }
 
-func CreateJWTToken(username string) string {
+func CreateJWTToken(username string, userId uint) (map[string]string, error) {
 	/*
 	アルゴリズム指定
 	 */
@@ -40,17 +40,50 @@ func CreateJWTToken(username string) string {
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 	// claims
 	claims := token.Claims.(jwt.MapClaims)
+	claims["sub"] = "AccessToken"
+	claims["userId"] = userId
 	claims["username"] = username
 	claims["iat"] = time.Now()
 	claims["exp"] = time.Now().Add(time.Hour * 4).Unix()
 
 	// Electronic signature
-	tokenString, err := token.SignedString([]byte(Config.SECRETKEY))
-	if err == nil {
-		return tokenString
-	} else {
-		return "token生成に失敗しました"
+	t, err := token.SignedString([]byte(Config.ACCESS_TOKEN_SECRETKEY))
+	if err != nil {
+		return nil, err
 	}
+
+	refreshToken := jwt.New(jwt.SigningMethodHS256)
+	rtClaims := refreshToken.Claims.(jwt.MapClaims)
+	rtClaims["sub"] = "RefreshToken"
+	rtClaims["userId"] = userId
+	rtClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
+	rt, err := refreshToken.SignedString([]byte(Config.REFRESH_TOKEN_SECRETKEY))
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]string{
+		"access_token": t,
+		"refresh_token": rt,
+	}, nil
+}
+
+func RefreshJWTToken(userId uint, token string, exp int64) (map[string]string, error) {
+	var user User
+	db := Config.DBConnect()
+	defer db.Close()
+	db.First(&user, userId).Scan(&user)
+	// Create New JWT Token (Access, Refresh)
+	tokens, err := CreateJWTToken(user.Username, userId)
+	if err != nil {
+		return nil, err
+	}
+	// リフレッシュトークンをブラックリストに登録
+	err = BlackListSet(exp, token)
+	if err != nil {
+		return nil, err
+	}
+	return tokens, nil
 }
 
 
