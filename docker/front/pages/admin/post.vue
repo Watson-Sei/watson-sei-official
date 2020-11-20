@@ -15,7 +15,7 @@ export default {
   name: "post",
   data() {
     return {
-      text: ''
+      text: '',
     }
   },
   methods: {

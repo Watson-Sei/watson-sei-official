@@ -53,6 +53,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
+    '@nuxtjs/auth-next',
     '@nuxtjs/vuetify'
   ],
   /*
@@ -73,11 +74,19 @@ export default {
     },
     strategies: {
       local: {
+        scheme: 'refresh',
+        token: {
+          property: 'access_token',
+        },
+        refreshToken: {
+          property: 'refresh_token',
+        },
         endpoints: {
-          login: {url: '/admin/login', method: 'post', propertyName: false},
-          logout: {url: '/admin/logout', method: 'get', propertyName: false},
+          login: {url: '/admin/login', method: 'post'},
+          logout: {url: '/admin/logout', method: 'get'},
+          refresh: {url: '/admin/refresh', method: 'get'},
           user: false
-        }
+        },
       }
     }
   },
