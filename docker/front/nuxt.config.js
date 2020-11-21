@@ -54,7 +54,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/auth-next',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
   ],
   /*
   ** Build configuration
@@ -63,7 +63,7 @@ export default {
   build: {
   },
   axios: {
-    baseURL: 'https://localhost/api'
+    baseURL: "https://localhost/api",
   },
   auth: {
     redirect: {
@@ -92,5 +92,5 @@ export default {
   },
   router: {
     middleware: ['auth']
-  }
+  },
 }

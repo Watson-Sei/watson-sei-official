@@ -1,12 +1,19 @@
 <template>
-  <div class="container">
-    <v-md-editor
-      v-model="text"
-      height="600px"
-      :disabled-menus="[]"
-      @upload-image="handleUploadImage"
-    />
-  </div>
+  <v-container>
+    <v-row>
+      <v-text-field  v-model="title" label="タイトル" solo></v-text-field>
+      <v-md-editor
+        v-model="text"
+        height="600px"
+        :disabled-menus="[]"
+        @upload-image="handleUploadImage"
+      />
+      <div class="d-flex justify-end">
+        <v-checkbox v-model="checked" :label="`そのまま公開`"></v-checkbox>
+        <v-btn @click="articleSave">記事を投稿</v-btn>
+      </div>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -15,6 +22,8 @@ export default {
   name: "post",
   data() {
     return {
+      checked: false,
+      title: '',
       text: '',
     }
   },
@@ -48,6 +57,19 @@ export default {
           console.log('response error', error)
         })
     },
+    articleSave: async function () {
+      this.$axios.$post('https://localhost/api/v1/user/create', {
+        title: this.title,
+        text: this.text,
+      })
+      .then((response) => {
+        console.log("success")
+        this.$router.push('/admin')
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    }
   },
 };
 </script>
