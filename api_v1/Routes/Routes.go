@@ -9,6 +9,31 @@ import (
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
+	//router.Use(cors.New(cors.Config{
+	//	// アクセスを許可したいアクセス元
+	//	AllowOrigins: []string{
+	//		"https://localhost",
+	//	},
+	//	// 許可したいHTTPメソッドの一覧
+	//	AllowMethods: []string{
+	//		"POST",
+	//		"GET",
+	//		"OPTIONS",
+	//		"PUT",
+	//		"DELETE",
+	//	},
+	//	// 許可したいHTTPリクエストヘッダーの一覧
+	//	AllowHeaders: []string{
+	//		"Access-Control-Allow-Credentials",
+	//		"Access-Control-Allow-Headers",
+	//		"Content-Type",
+	//		"Content-Length",
+	//		"Accept-Encoding",
+	//		"Authorization",
+	//	},
+	//	// preflightリクエストの結果をキャッシュする時間
+	//	MaxAge: 24 * time.Hour,
+	//}))
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/user/list", Controllers.GetArticle)
