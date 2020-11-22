@@ -46,6 +46,7 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    '@nuxtjs/vuetify',
   ],
   /*
   ** Nuxt.js modules
@@ -54,7 +55,6 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/auth-next',
-    '@nuxtjs/vuetify',
   ],
   /*
   ** Build configuration
