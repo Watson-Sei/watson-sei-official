@@ -7,7 +7,6 @@
 
 <script>
 export default {
-  name: "_id",
   auth: false,
   data() {
     return {

@@ -19,7 +19,6 @@
 <script>
 
 export default {
-  name: "post",
   data() {
     return {
       checked: false,

@@ -134,8 +134,11 @@ export default {
     },
     closeDelete () {
       this.dialogDelete = false
+    },
+    editItem (item) {
+      this.$router.push('/admin/post/' + item.id)
     }
-  }
+  },
 }
 </script>
 

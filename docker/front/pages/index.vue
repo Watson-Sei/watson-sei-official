@@ -3,7 +3,7 @@
     <h1>Main Page</h1>
     <ul>
       <li v-for="(post, index) in posts" :key="index">
-        <a :href="`/article/` + post.id" target="_blank" rel="noopener noreferrer">{{ post.title }}</a>
+        <a :href="`/article/` + post.id">{{ post.title }}</a>
       </li>
     </ul>
   </div>
