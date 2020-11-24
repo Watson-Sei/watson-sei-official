@@ -1,8 +1,39 @@
 <template>
-  <div>
-    <Nuxt />
-  </div>
+  <v-app>
+    <Navbar/>
+    <Footer/>
+  </v-app>
 </template>
+
+<script>
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+export default {
+  components: {Navbar, Footer},
+  middleware({ route, store }) {
+    if (route.path.match(/admin/)) {
+      if (route.path.match(/login/)) {
+        console.log('ログイン画面です。')
+        store.commit('check/adminFalse')
+        console.log(store.getters['check/adminStatus'])
+      } else {
+        console.log('admin画面です。')
+        store.commit('check/adminTrue')
+        console.log(store.getters['check/adminStatus'])
+      }
+    } else {
+      console.log('通常画面です。')
+      store.commit('check/adminFalse')
+      console.log(store.getters['check/adminStatus'])
+    }
+  },
+  computed: {
+    admin () {
+      return this.$store.getters['check/adminStatus']
+    }
+  }
+}
+</script>
 
 <style>
 html {

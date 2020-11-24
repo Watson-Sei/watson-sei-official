@@ -30,6 +30,10 @@ export default {
   */
   css: [
   ],
+  vuetify: {
+    customVariables: ['~/assets/common/common.scss'],
+    treeShake: true,
+  },
   /*
   ** Plugins to load before mounting the App
   ** https://nuxtjs.org/guide/plugins

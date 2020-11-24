@@ -1,0 +1,31 @@
+/* メディアクエリブレークポイント */
+$xs: 600;
+$sm: 960;
+$md: 1264;
+$lg: 1904;
+
+$sp-max: calc($xs - 1)px;
+$tb-min: $xs + px;
+$tb-max: calc($sm - 1)px;
+$pc-min: $sm + px;
+
+/* PC */
+@mixin display_pc {
+  @media (min-width: $pc-min) {
+    @content;
+  }
+}
+
+/* タブレット */
+@mixin display_tab {
+  @media (min-width: $tb-min) and (max-width: $tb-max) {
+    @content;
+  }
+}
+
+/* スマホ */
+@mixin display_sp {
+  @media (max-width: $sp-max) {
+    @content;
+  }
+}
