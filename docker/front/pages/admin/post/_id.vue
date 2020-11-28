@@ -2,6 +2,20 @@
   <v-container>
     <v-row>
       <v-text-field  v-model="title" label="タイトル" solo></v-text-field>
+
+      <v-flex xs12>
+        <v-combobox multiple
+                    v-model="select"
+                    label="Tags"
+                    chips
+                    class="tag-input"
+                   >
+        </v-combobox>
+      </v-flex>
+
+      <p>概要</p>
+      <v-textarea v-model="overview"></v-textarea>
+
       <v-md-editor
         v-model="text"
         height="600px"
@@ -22,14 +36,18 @@ export default {
     return {
       checked: false,
       title: '',
+      overview: '',
       text: '',
+      select: [],
     }
   },
   mounted() {
-    this.$axios.$get('https://localhost/api/v1/user/detail/' + this.$route.params.id)
+    this.$axios.$get('https://localhost/api/v1/article/detail/' + this.$route.params.id)
     .then(res => {
       this.title = res.title
+      this.overview = res.overview
       this.text = res.text
+      this.selectAdd(res.tags)
     })
     .catch(err => {
       console.log(err)
@@ -67,8 +85,9 @@ export default {
         })
     },
     articleUpdate: async function () {
-      this.$axios.$put('https://localhost/api/v1/user/update/' + this.$route.params.id, {
+      this.$axios.$put('https://localhost/api/v1/article/update/' + this.$route.params.id, {
         title: this.title,
+        overview: this.overview,
         text: this.text,
       })
         .then((response) => {
@@ -78,7 +97,12 @@ export default {
         .catch((err) => {
           console.log(err)
         })
-    }
+    },
+    selectAdd: function (tags) {
+      for (let i = 0; i < tags.length; i++) {
+        this.select.push(tags[i].Name)
+      }
+    },
   }
 }
 </script>

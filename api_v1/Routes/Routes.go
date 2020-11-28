@@ -35,12 +35,16 @@ func SetupRouter() *gin.Engine {
 	//}))
 	v1 := router.Group("/v1")
 	{
-		v1.GET("/user/list", Controllers.GetArticle)
-		v1.POST("/user/create", Middleware.JWTChecker(), Controllers.CreateArticle)
-		v1.GET("/user/detail/:id", Controllers.GetArticleByID)
-		v1.PUT("/user/update/:id", Middleware.JWTChecker(), Controllers.UpdateArticle)
-		v1.DELETE("/user/delete/:id", Middleware.JWTChecker(), Controllers.DeleteArticle)
+		v1.GET("/article/list", Controllers.GetArticle)
+		v1.POST("/article/create", Middleware.JWTChecker(), Controllers.CreateArticle)
+		v1.GET("/article/detail/:id", Controllers.GetArticleByID)
+		v1.PUT("/article/update/:id", Middleware.JWTChecker(), Controllers.UpdateArticle)
+		v1.DELETE("/article/delete/:id", Middleware.JWTChecker(), Controllers.DeleteArticle)
+		v1.GET("/article/tags", Controllers.GetAllTag)
+		v1.GET("/article/tags/:tag", Controllers.GetArticleByTag)
+
 		v1.POST("/upload/image", Controllers.UploadImage)
+
 	}
 	admin := router.Group("/admin")
 	{

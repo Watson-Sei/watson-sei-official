@@ -2,13 +2,29 @@
   <v-container>
     <v-row>
       <v-text-field  v-model="title" label="タイトル" solo></v-text-field>
+      <v-flex xs12>
+        <v-combobox multiple
+                    v-model="select"
+                    label="Tags"
+                    chips
+                    deletable-chips
+                    class="tag-input"
+                    :search-input.sync="search"
+                    @keyup.tab="updateTags"
+                    @paste="updateTags">
+        </v-combobox>
+      </v-flex>
+
+      <p>概要</p>
+      <v-textarea v-model="overview"></v-textarea>
+
       <v-md-editor
         v-model="text"
         height="600px"
         :disabled-menus="[]"
         @upload-image="handleUploadImage"
       />
-      <div class="d-flex justify-end">
+      <div>
         <v-checkbox v-model="checked" :label="`そのまま公開`"></v-checkbox>
         <v-btn @click="articleSave">記事を投稿</v-btn>
       </div>
@@ -23,7 +39,10 @@ export default {
     return {
       checked: false,
       title: '',
+      overview: '',
       text: '',
+      select: [],
+      search: "",
     }
   },
   methods: {
@@ -57,9 +76,11 @@ export default {
         })
     },
     articleSave: async function () {
-      this.$axios.$post('https://localhost/api/v1/user/create', {
+      this.$axios.$post('https://localhost/api/v1/article/create', {
         title: this.title,
+        overview: this.overview,
         text: this.text,
+        tags: this.selectArray(this.select),
       })
       .then((response) => {
         console.log("success")
@@ -68,17 +89,25 @@ export default {
       .catch((err) => {
         console.log(err)
       })
-    }
+    },
+    updateTags() {
+      this.$nextTick(() => {
+        this.select.push(...this.search.split(","));
+        this.$nextTick(() => {
+          this.search = "";
+        });
+      });
+    },
+    selectArray: function (tags) {
+      let array = []
+      for (let i = 0; i < tags.length; i++) {
+        array.push({Name: tags[i]})
+      }
+      return array
+    },
   },
 };
 </script>
 
 <style scoped>
-  .container {
-    margin: 0 auto;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 </style>

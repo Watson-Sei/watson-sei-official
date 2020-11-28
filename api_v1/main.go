@@ -16,7 +16,7 @@ func main() {
 	db := Config.DBConnect()
 	defer db.Close()
 	// Migrate
-	db.AutoMigrate(&Models.Article{}, &Models.User{})
+	db.AutoMigrate(&Models.Article{}, &Models.User{}, &Models.Tag{})
 
 	router := Routes.SetupRouter()
 	// Static Server

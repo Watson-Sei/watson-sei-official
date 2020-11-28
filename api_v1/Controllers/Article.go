@@ -1,7 +1,6 @@
 package Controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Models"
@@ -25,8 +24,8 @@ func CreateArticle(context *gin.Context) {
 	context.BindJSON(&article)
 	err := Models.CreateArticle(&article)
 	if err != nil {
-		fmt.Println(err.Error())
-		context.AbortWithStatus(http.StatusNotFound)
+		context.JSON(http.StatusBadRequest, gin.H{"err":err})
+		return
 	} else {
 		context.JSON(http.StatusOK, article)
 	}
@@ -54,7 +53,7 @@ func UpdateArticle(context *gin.Context) {
 		return
 	}
 	context.BindJSON(&article)
-	err = Models.UpdateArticle(&article, id)
+	err = Models.UpdateArticle(&article)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -85,4 +84,26 @@ func UploadImage(context *gin.Context)  {
 		context.Abort()
 	}
 	context.JSON(http.StatusOK, gin.H{"url": "assets/" + uuid + ".png"})
+}
+
+// タグ一覧
+func GetAllTag(context *gin.Context) {
+	var tags []Models.Tag
+	err := Models.GetAllTag(&tags)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"err":err})
+		return
+	}
+	context.JSON(http.StatusOK, tags)
+}
+
+func GetArticleByTag(context *gin.Context) {
+	tagParam := context.Params.ByName("tag")
+	var articles []Models.Article
+	err := Models.GetArticleByTag(&articles, tagParam)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"err":err})
+		return
+	}
+	context.JSON(http.StatusOK, articles)
 }
