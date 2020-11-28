@@ -7,11 +7,10 @@ WORKDIR /go/src/api
 
 ENV GO111MODULE=on
 
+RUN go mod download
+
 RUN apk update \
   && apk add --no-cache git \
-  && go get -u github.com/gin-gonic/gin \
-  && go get -u github.com/jinzhu/gorm \
-  && go get -u github.com/jinzhu/gorm/dialects/mysql \
   && go get -u github.com/pilu/fresh
 
 EXPOSE 8080

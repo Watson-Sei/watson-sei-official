@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h1 style="text-align: center; margin-top: 20px">新着記事！</h1>
-    <!-- card sample -->
+    <h1 style="text-align: center; margin-top: 20px;">タグ: {{ this.$route.params.name }}</h1>
     <v-card
       v-for="(post, index) in posts"
       :key="index"
@@ -45,22 +44,21 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <!-- end -->
   </div>
 </template>
-
 <script>
 export default {
+  name: "_name",
   auth: false,
   data() {
     return {
-      posts: null,
+      posts: null
     }
   },
   mounted() {
-    this.$axios.get('https://localhost/api/v1/article/list')
+    this.$axios.get('https://localhost/api/v1/article/tags/' + this.$route.params.name)
     .then(res => {
-      this.posts = res.data.reverse()
+      this.posts = res.data
     })
     .catch(err => {
       console.log(err)
@@ -69,6 +67,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

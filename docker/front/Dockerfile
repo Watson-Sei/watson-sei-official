@@ -4,7 +4,9 @@ ENV LANG=C.UTF-8 TZ=Asia/Tokyo
 
 WORKDIR /app
 
-RUN apk update
+RUN apk update && \
+    apk upgrade && \
+    apk add --no-cache make gcc g++ python
 
 COPY ./docker/front/package*.json ./
 

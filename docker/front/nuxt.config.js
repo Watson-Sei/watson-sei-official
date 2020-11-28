@@ -30,11 +30,16 @@ export default {
   */
   css: [
   ],
+  vuetify: {
+    customVariables: ['~/assets/common/common.scss'],
+    treeShake: true,
+  },
   /*
   ** Plugins to load before mounting the App
   ** https://nuxtjs.org/guide/plugins
   */
   plugins: [
+    { src: '@/plugins/editor.js', mode: 'client' },
   ],
   /*
   ** Auto import components
@@ -45,16 +50,51 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
+    '@nuxtjs/vuetify',
   ],
   /*
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/auth',
+    '@nuxtjs/auth-next',
   ],
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
-  }
+  },
+  axios: {
+    baseURL: "https://localhost/api",
+  },
+  auth: {
+    redirect: {
+      login: '/admin/login',
+      logout: '/admin/login',
+      callback: false,
+      home: '/admin'
+    },
+    strategies: {
+      local: {
+        scheme: 'refresh',
+        token: {
+          property: 'access_token',
+        },
+        refreshToken: {
+          property: 'refresh_token',
+        },
+        endpoints: {
+          login: {url: '/admin/login', method: 'post'},
+          logout: {url: '/admin/logout', method: 'get'},
+          refresh: {url: '/admin/refresh', method: 'get'},
+          user: false
+        },
+      }
+    }
+  },
+  router: {
+    middleware: ['auth']
+  },
 }

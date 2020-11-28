@@ -35,31 +35,38 @@ func LoginPost(context *gin.Context)  {
 			context.JSON(http.StatusBadRequest, gin.H{"err":err})
 			return
 		}
-		context.JSON(http.StatusOK, gin.H{
-			"token":Models.CreateJWTToken(user.Username),
-		})
+		tokens, err := Models.CreateJWTToken(user.Username, user.ID)
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"err":err})
+			return
+		}
+		context.JSON(http.StatusOK, tokens)
 	}
 }
 
 // Logout
-type UserJWT struct {
-	token	string	`json:"token" biding:"required"`
+func LogoutPost(context *gin.Context)  {
+	exp := context.MustGet("exp").(float64)
+	token := context.MustGet("token").(string)
+	err := Models.BlackListSet(int64(exp), token)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"err":err})
+		context.Abort()
+	} else {
+		context.JSON(http.StatusOK, gin.H{"message":"Logout成功しました"})
+	}
 }
 
-func LogoutPost(context *gin.Context)  {
-	var userJwt UserJWT
-	if err := context.Bind(&userJwt); err != nil {
+// Token Refresh
+func RefreshGet(context *gin.Context)  {
+	userId := context.MustGet("userId").(float64)
+	refreshToken := context.MustGet("token").(string)
+	exp := context.MustGet("exp").(float64)
+	tokens, err := Models.RefreshJWTToken(uint(userId), refreshToken, int64(exp))
+	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
-		return
+		context.Abort()
 	} else {
-		exp := context.MustGet("exp").(float64)
-		token := context.MustGet("token").(string)
-		err := Models.BlackListSet(int64(exp), token)
-		if err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"err":err})
-			context.Abort()
-		} else {
-			context.JSON(http.StatusOK, gin.H{"message":"Logout成功しました"})
-		}
+		context.JSON(http.StatusOK, tokens)
 	}
 }
