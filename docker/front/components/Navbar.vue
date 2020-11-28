@@ -15,6 +15,9 @@
         >
           {{ menuItem.name }}
         </v-tab>
+        <v-tab v-if="$store.$auth.loggedIn" @click="logout">
+          LOGOUT
+        </v-tab>
       </v-tabs>
     </v-app-bar>
     <v-navigation-drawer
@@ -33,6 +36,9 @@
             :href="menuItem.url"
           >
             <v-list-item-title>{{ menuItem.name }}</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-if="$store.$auth.loggedIn" @click="logout">
+            <v-list-item-title>LOGOUT</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>
@@ -69,6 +75,9 @@ export default {
   methods: {
     push: function (url) {
       this.$router.push(url)
+    },
+    logout() {
+      this.$auth.logout()
     }
   }
 }

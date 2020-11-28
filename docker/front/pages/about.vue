@@ -32,7 +32,8 @@
 
 <script>
 export default {
-  name: "about"
+  name: "about",
+  auth: false
 }
 </script>
 
