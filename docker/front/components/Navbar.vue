@@ -11,6 +11,7 @@
         <v-tab
           v-for="(menuItem, index) in menuItems"
           :key="index"
+          :href="menuItem.url"
         >
           {{ menuItem.name }}
         </v-tab>
@@ -30,7 +31,6 @@
             v-for="(menuItem, index) in menuItems"
             :key="index"
             :href="menuItem.url"
-            :target="menuItem.target"
           >
             <v-list-item-title>{{ menuItem.name }}</v-list-item-title>
           </v-list-item>
@@ -56,13 +56,16 @@ export default {
           url: 'https://localhost',
         },
         {
+          name: 'Tag',
+          url: 'https://localhost/tags',
+        },
+        {
           name: 'ABOUT',
-          url: 'https://watson-sei.github.io/TechFox/#section1',
-          target: '_blank'
+          url: 'https://localhost/about',
         },
         {
           name: 'CONTACT',
-          url: '#',
+          url: 'https://localhost/contact',
         }
       ]
     }

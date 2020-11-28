@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h1>{{ articleTitle }}</h1>
+  <v-container>
+    <h1 style="text-align: center">{{ articleTitle }}</h1>
     <v-md-preview :text="articleText"></v-md-preview>
-  </div>
+  </v-container>
 </template>
 
 <script>
