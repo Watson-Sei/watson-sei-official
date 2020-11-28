@@ -11,7 +11,7 @@
         <v-tab
           v-for="(menuItem, index) in menuItems"
           :key="index"
-          :href="menuItem.url"
+          @click="push(menuItem.url)"
         >
           {{ menuItem.name }}
         </v-tab>
@@ -53,23 +53,24 @@ export default {
       menuItems: [
         {
           name: 'BLOG',
-          url: 'https://localhost',
+          url: '/',
         },
         {
           name: 'Tag',
-          url: 'https://localhost/tags',
+          url: '/tags',
         },
         {
           name: 'ABOUT',
-          url: 'https://localhost/about',
+          url: '/about',
         },
-        {
-          name: 'CONTACT',
-          url: 'https://localhost/contact',
-        }
       ]
     }
   },
+  methods: {
+    push: function (url) {
+      this.$router.push(url)
+    }
+  }
 }
 </script>
 
