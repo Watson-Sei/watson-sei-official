@@ -19,7 +19,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('https://localhost/api/v1/article/tags')
+    this.$axios.get(`${process.env.API}/v1/article/tags`)
     .then(res => {
       this.tags = res.data
     })

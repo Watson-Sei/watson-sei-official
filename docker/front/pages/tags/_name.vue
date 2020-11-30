@@ -56,7 +56,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('https://localhost/api/v1/article/tags/' + this.$route.params.name)
+    this.$axios.get(`${process.env.API}/v1/article/tags/` + this.$route.params.name)
     .then(res => {
       this.posts = res.data
     })

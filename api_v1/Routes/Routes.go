@@ -3,36 +3,34 @@ package Routes
 import (
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Controllers"
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Middleware"
+
+	// "github.com/gin-gonic/contrib/cors"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
-	//router.Use(cors.New(cors.Config{
-	//	// アクセスを許可したいアクセス元
-	//	AllowOrigins: []string{
-	//		"https://localhost",
-	//	},
-	//	// 許可したいHTTPメソッドの一覧
-	//	AllowMethods: []string{
-	//		"POST",
-	//		"GET",
-	//		"OPTIONS",
-	//		"PUT",
-	//		"DELETE",
-	//	},
-	//	// 許可したいHTTPリクエストヘッダーの一覧
-	//	AllowHeaders: []string{
-	//		"Access-Control-Allow-Credentials",
-	//		"Access-Control-Allow-Headers",
-	//		"Content-Type",
-	//		"Content-Length",
-	//		"Accept-Encoding",
-	//		"Authorization",
-	//	},
-	//	// preflightリクエストの結果をキャッシュする時間
-	//	MaxAge: 24 * time.Hour,
-	//}))
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"https://localhost", "http://localhost:3000","https://www.watson-sei.tokyo"},
+		AllowMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
+		AllowHeaders: []string{
+			"Access-Control-Allow-Headers",
+			"Content-Type",
+			"Content-Length",
+			"Accept-Encoding",
+			"X-CSRF-Token",
+			"Authorization",
+		},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			if origin == "https://localhost" || origin == "http://localhost:3000" || origin == "https://www.watson-sei.tokyo" {
+				return true
+			} else {
+				return false
+			}
+		},
+	}))
 	v1 := router.Group("/v1")
 	{
 		v1.GET("/article/list", Controllers.GetArticle)
