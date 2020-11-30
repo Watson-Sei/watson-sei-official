@@ -15,7 +15,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('https://localhost/api/v1/article/detail/' + this.$route.params.id)
+    this.$axios.get(`${process.env.API}/v1/article/detail/` + this.$route.params.id)
     .then(res => {
       this.articleTitle = res.data.title
       this.articleText = res.data.text

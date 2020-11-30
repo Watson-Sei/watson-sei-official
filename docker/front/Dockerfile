@@ -11,6 +11,7 @@ RUN apk update && \
 COPY ./docker/front/package*.json ./
 
 RUN yarn install
+RUN yarn build
 
 COPY ./docker/front .
 

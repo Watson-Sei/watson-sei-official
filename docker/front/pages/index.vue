@@ -58,7 +58,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get('https://localhost/api/v1/article/list')
+    this.$axios.get(`${process.env.API}/v1/article/list`)
     .then(res => {
       this.posts = res.data.reverse()
     })

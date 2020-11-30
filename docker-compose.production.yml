@@ -43,20 +43,6 @@ services:
     tty: true
     command: fresh
 
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    depends_on:
-      - db
-    environment:
-      - PMA_ARBITRARY=1           # <= コメントアウトしていない場合はHOSTSの情報を入力する
-      - PMA_HOSTS=Models
-#      - PMA_USER=docker_user     # <= コメントアウトするとログイン画面表示される
-#      - PMA_PASSWORD=docker_pass # <= コメントアウトするとログイン画面表示される
-    ports:
-      - 8888:8888
-    volumes:
-      - ./docker/phpmyadmin/sessions:/sessions
-
   # frontend Nuxt.js
   nuxt:
     build:
@@ -71,7 +57,7 @@ services:
       - api
     tty: true
     working_dir: /app
-    command: yarn dev
+    command: yarn start
 
   # Nginx WebServer
   nginx:
