@@ -65,7 +65,7 @@ services:
       - nuxt
     build:
       context: .
-      dockerfile: ./docker/nginx/Dockerfile
+      dockerfile: ./docker/nginx/Dockerfile.production
     ports:
       - 80:80
       - 443:443

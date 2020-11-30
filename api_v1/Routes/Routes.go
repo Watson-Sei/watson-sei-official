@@ -24,7 +24,7 @@ func SetupRouter() *gin.Engine {
 		},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
-			if origin == "https://localhost" || origin == "http://localhost:3000" || origin == "https://www.watson-sei.tokyo" {
+			if origin == "https://localhost" || origin == "http://localhost:3000" || origin == "https://www.watson-sei.tokyo" || origin == "http://www.watson-sei.tokyo" {
 				return true
 			} else {
 				return false
