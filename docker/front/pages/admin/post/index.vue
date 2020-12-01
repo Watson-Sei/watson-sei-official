@@ -67,7 +67,7 @@ export default {
           // これで埋め込む
           insertImage({
             // url: 'https://zukan.pokemon.co.jp/zukan-api/up/images/index/f8d806f32ee833db68f00e2c50b136be.png',
-            url: `${process.env.API}` + response.url,
+            url: `${process.env.API}/` + response.url,
             desc: 'desc',
           });
         })

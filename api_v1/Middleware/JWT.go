@@ -27,7 +27,7 @@ func JWTChecker() gin.HandlerFunc {
 			} else {
 				claims := token.Claims.(jwt.MapClaims)
 				context.Set("exp", claims["exp"])
-				context.Set("token", token.Raw)
+				context.Set("accessToken", token.Raw)
 				context.Next()
 			}
 		} else {
@@ -54,7 +54,7 @@ func RefreshChecker() gin.HandlerFunc {
 				claims := token.Claims.(jwt.MapClaims)
 				context.Set("userId", claims["userId"])
 				context.Set("exp", claims["exp"])
-				context.Set("token", token.Raw)
+				context.Set("refreshToken", token.Raw)
 				context.Next()
 			}
 		} else {

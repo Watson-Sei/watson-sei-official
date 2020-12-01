@@ -23,6 +23,7 @@
           :key="index"
           class="ma-2"
           color="primary"
+          @click="$router.push('/tags/' + tag.Name)"
         >
           {{ tag.Name }}
         </v-chip>

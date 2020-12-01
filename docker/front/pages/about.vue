@@ -13,7 +13,7 @@
         <h1>Watson-Sei</h1>
       </v-row>
       <v-row justify="center">
-        <p style="padding: 12px; max-width: 500px;">Go/TypeScriptを使って個人開発をしている高校生です。</p>
+        <p style="padding: 12px; max-width: 500px;">Go/NuxtでWeb開発しています。</p>
       </v-row>
       <v-row justify="space-around" style="max-width: 500px; margin: auto">
         <v-btn icon href="https://github.com/Watson-Sei" target="_blank">
