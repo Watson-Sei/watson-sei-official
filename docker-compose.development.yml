@@ -66,6 +66,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/nginx/Dockerfile
+      target: dev_stage
     ports:
       - 80:80
     environment:
