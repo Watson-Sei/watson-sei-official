@@ -62,7 +62,7 @@ export default {
           url: '/',
         },
         {
-          name: 'Tag',
+          name: 'TAG',
           url: '/tags',
         },
         {
