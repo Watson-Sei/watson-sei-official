@@ -47,7 +47,7 @@ func LoginPost(context *gin.Context)  {
 // Logout
 func LogoutPost(context *gin.Context)  {
 	exp := context.MustGet("exp").(float64)
-	token := context.MustGet("token").(string)
+	token := context.MustGet("accessToken").(string)
 	err := Models.BlackListSet(int64(exp), token)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
@@ -60,7 +60,7 @@ func LogoutPost(context *gin.Context)  {
 // Token Refresh
 func RefreshGet(context *gin.Context)  {
 	userId := context.MustGet("userId").(float64)
-	refreshToken := context.MustGet("token").(string)
+	refreshToken := context.MustGet("refreshToken").(string)
 	exp := context.MustGet("exp").(float64)
 	tokens, err := Models.RefreshJWTToken(uint(userId), refreshToken, int64(exp))
 	if err != nil {

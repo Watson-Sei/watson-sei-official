@@ -4,7 +4,6 @@ import (
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Controllers"
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Middleware"
 
-	// "github.com/gin-gonic/contrib/cors"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +11,7 @@ import (
 func SetupRouter() *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"https://localhost", "http://localhost:3000","https://www.watson-sei.tokyo"},
+		AllowOrigins: []string{"https://localhost", "http://localhost:3000", "https://www.watson-sei.tokyo"},
 		AllowMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
 		AllowHeaders: []string{
 			"Access-Control-Allow-Headers",
@@ -24,11 +23,7 @@ func SetupRouter() *gin.Engine {
 		},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
-			if origin == "https://localhost" || origin == "http://localhost:3000" || origin == "https://www.watson-sei.tokyo" || origin == "http://www.watson-sei.tokyo" {
-				return true
-			} else {
-				return false
-			}
+			return CorsChecker(origin, cors.DefaultConfig().AllowOrigins)
 		},
 	}))
 	v1 := router.Group("/v1")
@@ -41,11 +36,12 @@ func SetupRouter() *gin.Engine {
 		v1.GET("/article/tags", Controllers.GetAllTag)
 		v1.GET("/article/tags/:tag", Controllers.GetArticleByTag)
 
-		v1.POST("/upload/image", Controllers.UploadImage)
+		v1.POST("/upload/image", Middleware.JWTChecker(), Controllers.UploadImage)
 
 	}
 	admin := router.Group("/admin")
 	{
+		// サイトを後悔する際に/signupはコメントアウトして使えないようにする(cli createsuperuserコマンドを作成するのが解決策)
 		admin.POST("/signup", Controllers.SignupPost)
 		admin.POST("/login", Controllers.LoginPost)
 		admin.GET("/logout", Middleware.JWTChecker(), Controllers.LogoutPost)
@@ -53,4 +49,14 @@ func SetupRouter() *gin.Engine {
 		admin.GET("/main", Middleware.JWTChecker(), Controllers.Main)
 	}
 	return router
+}
+
+// Cors Checker
+func CorsChecker(origin string, corsList []string) bool {
+	for _, v := range corsList {
+		if origin == v {
+			return true
+		}
+	}
+	return false
 }
