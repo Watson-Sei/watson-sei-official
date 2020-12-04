@@ -33,3 +33,12 @@ docker-compose -f docker-compose.development.yml up -d --build
 ```
 docker-compose -f docker-compose.production.yml up -d --build
 ```
+
+gin-adminでcreate admin user
+```
+docker exec -it watson-sei-official_api_1 sh
+↓
+cd $GOPATH/bin
+↓
+./gin-admin create -u <username> -p <password>
+```
