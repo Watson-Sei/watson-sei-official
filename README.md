@@ -4,6 +4,7 @@ watson-sei.tokyoがドメインのなんでもサイト
 ```
 /docker/db/.env
 
+HOST=tcp(db)
 MYSQL_ROOT_PASSWORD=root
 MYSQL_USER=docker_user
 MYSQL_PASSWORD=docker_pass
