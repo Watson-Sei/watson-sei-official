@@ -23,5 +23,3 @@ func (b *Article) TableName() string {
 func (b *Tag) TableName() string {
 	return "tag"
 }
-
-

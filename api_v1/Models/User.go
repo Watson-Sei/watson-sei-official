@@ -10,22 +10,18 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func CreateUser(username string, password string) (err error) {
-	db := Config.DBConnect()
-	defer db.Close()
+func (m Model) CreateUser(username string, password string) error {
 	hash, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
 	// insert処理
-	if err := db.Create(&User{Username: username,Password: string(hash)}).Error; err != nil {
+	if err := m.Db.Create(&User{Username: username,Password: string(hash)}).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func PasswordChecker(username string, password string) (err error) {
+func (m Model) PasswordChecker(username string, password string) error {
 	var user User
-	db := Config.DBConnect()
-	defer db.Close()
-	db.Find(&User{}, "username =?", username).Scan(&user)
+	m.Db.Find(&User{}, "username =?", username).Scan(&user)
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return err
 	}
@@ -34,8 +30,8 @@ func PasswordChecker(username string, password string) (err error) {
 
 func CreateJWTToken(username string, userId uint) (map[string]string, error) {
 	/*
-	アルゴリズム指定
-	 */
+		アルゴリズム指定
+	*/
 	// header
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 	// claims
@@ -68,11 +64,9 @@ func CreateJWTToken(username string, userId uint) (map[string]string, error) {
 	}, nil
 }
 
-func RefreshJWTToken(userId uint, token string, exp int64) (map[string]string, error) {
+func (m Model) RefreshJWTToken(userId uint, token string, exp int64) (map[string]string, error) {
 	var user User
-	db := Config.DBConnect()
-	defer db.Close()
-	db.First(&user, userId).Scan(&user)
+	m.Db.First(&user, userId).Scan(&user)
 	// Create New JWT Token (Access, Refresh)
 	tokens, err := CreateJWTToken(user.Username, userId)
 	if err != nil {
@@ -100,7 +94,7 @@ func BlackListSet(exp int64, token string) error {
 	timeLeft := expTime.Sub(nowTime).Seconds()
 
 	// Redis DBに追加
-	_, err := conn.Do("SET", token, string(exp))
+	_, err := conn.Do("SET", token, byte(exp))
 	_, err = conn.Do("EXPIRE", token, int64(timeLeft))
 	if err != nil {
 		return err

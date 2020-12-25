@@ -2,76 +2,54 @@ package Models
 
 import (
 	"fmt"
-
-	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 // GetAllArticles Fetch all article data
-func GetAllArticle(article *[]Article) (err error) {
-	db := Config.DBConnect()
-	defer db.Close()
-	if err = db.Preload("Tags").Find(&article).Error; err != nil {
-		return err
-	}
-	return nil
+func (m Model) GetAllArticle(article *[]Article) error {
+	err := m.Db.Preload("Tags").Find(&article).Error
+	return err
 }
 
 // CreateArticle ... Insert New data
-func CreateArticle(article *Article) (err error) {
-	db := Config.DBConnect()
-	defer db.Close()
-	if err = db.Create(article).Error; err != nil {
-		return err
-	}
-	return nil
+func (m Model) CreateArticle(article *Article) error {
+	err = m.Db.Create(article).Error
+	return err
 }
 
 // GetArticleByID ... Fetch only one article by Id
-func GetArticleByID(article *Article, id string) (err error) {
-	db := Config.DBConnect()
-	defer db.Close()
-	if err = db.Where("id = ?", id).Preload("Tags").First(article).Error; err != nil {
-		return err
-	}
-	return nil
+func (m Model) GetArticleByID(article *Article, id string) error {
+	err = m.Db.Where("id = ?", id).Preload("Tags").First(article).Error
+	return err
 }
 
 // UpdateArticle ... Update article
-func UpdateArticle(article *Article) (err error) {
-	db := Config.DBConnect()
-	defer db.Close()
+func (m Model) UpdateArticle(article *Article) error {
 	fmt.Println(article)
-	db.Omit("Tags").Save(article)
+	m.Db.Omit("Tags").Save(article)
 	return nil
 }
 
 // DeleteArticle ... Delete article
-func DeleteArticle(article *Article, id string) (err error) {
+func (m Model) DeleteArticle(article *Article, id string) error {
 	var tag Tag
-	db := Config.DBConnect()
-	defer db.Close()
-	db.Where("id = ?", id).Delete(article)
-	db.Where("article_id = ?", id).Delete(tag)
+	m.Db.Where("id = ?", id).Delete(article)
+	m.Db.Where("article_id = ?", id).Delete(tag)
 	return nil
 }
 
 
 // Tagの処理
-func GetAllTag(tag *[]Tag) (err error) {
-	db := Config.DBConnect()
-	defer db.Close()
-	if err = db.Select("name").Group("name").Find(&tag).Error; err != nil {
+func (m Model) GetAllTag(tag *[]Tag) error {
+	if err = m.Db.Select("name").Group("name").Find(&tag).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
 // 特定タグの記事一覧
-func GetArticleByTag(article *[]Article, tagParam string) (err error) {
-	db := Config.DBConnect()
-	defer db.Close()
-	if err = db.Joins("inner join tag on article.id = tag.article_id").Where("tag.name = ?", tagParam).Preload("Tags").Find(&article).Error; err != nil {
+func (m Model) GetArticleByTag(article *[]Article, tagParam string) error {
+	if err = m.Db.Joins("inner join tag on article.id = tag.article_id").Where("tag.name = ?", tagParam).Preload("Tags").Find(&article).Error; err != nil {
 		return err
 	}
 	return nil

@@ -8,9 +8,9 @@ import (
 )
 
 // GetArticle ... Get all article
-func GetArticle(context *gin.Context) {
+func (c Controller) GetArticle(context *gin.Context) {
 	var articles []Models.Article
-	err := Models.GetAllArticle(&articles)
+	err := c.Model.GetAllArticle(&articles)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -19,10 +19,10 @@ func GetArticle(context *gin.Context) {
 }
 
 // CreateArticle ... Create all article
-func CreateArticle(context *gin.Context) {
+func (c Controller) CreateArticle(context *gin.Context) {
 	var article Models.Article
 	context.BindJSON(&article)
-	err := Models.CreateArticle(&article)
+	err := c.Model.CreateArticle(&article)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
 		return
@@ -32,10 +32,10 @@ func CreateArticle(context *gin.Context) {
 }
 
 // GetArticleByID ... Get the article by id
-func GetArticleByID(context *gin.Context) {
+func (c Controller) GetArticleByID(context *gin.Context) {
 	id := context.Params.ByName("id")
 	var article Models.Article
-	err := Models.GetArticleByID(&article, id)
+	err := c.Model.GetArticleByID(&article, id)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -44,16 +44,16 @@ func GetArticleByID(context *gin.Context) {
 }
 
 // UpdateArticle ... Update the article information
-func UpdateArticle(context *gin.Context) {
+func (c Controller) UpdateArticle(context *gin.Context) {
 	var article Models.Article
 	id := context.Params.ByName("id")
-	err := Models.GetArticleByID(&article, id)
+	err := c.Model.GetArticleByID(&article, id)
 	if err != nil {
 		context.JSON(http.StatusNotFound, article)
 		return
 	}
 	context.BindJSON(&article)
-	err = Models.UpdateArticle(&article)
+	err = c.Model.UpdateArticle(&article)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -62,10 +62,10 @@ func UpdateArticle(context *gin.Context) {
 }
 
 // DeleteArticle ... Delete the article
-func DeleteArticle(context *gin.Context) {
+func (c Controller) DeleteArticle(context *gin.Context) {
 	var article Models.Article
 	id := context.Params.ByName("id")
-	err := Models.DeleteArticle(&article, id)
+	err := c.Model.DeleteArticle(&article, id)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -87,9 +87,9 @@ func UploadImage(context *gin.Context)  {
 }
 
 // タグ一覧
-func GetAllTag(context *gin.Context) {
+func (c Controller) GetAllTag(context *gin.Context) {
 	var tags []Models.Tag
-	err := Models.GetAllTag(&tags)
+	err := c.Model.GetAllTag(&tags)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
 		return
@@ -97,10 +97,10 @@ func GetAllTag(context *gin.Context) {
 	context.JSON(http.StatusOK, tags)
 }
 
-func GetArticleByTag(context *gin.Context) {
+func (c Controller) GetArticleByTag(context *gin.Context) {
 	tagParam := context.Params.ByName("tag")
 	var articles []Models.Article
-	err := Models.GetArticleByTag(&articles, tagParam)
+	err := c.Model.GetArticleByTag(&articles, tagParam)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
 		return
