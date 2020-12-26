@@ -161,3 +161,25 @@ func TestModel_DeleteArticle(t *testing.T) {
 
 	assert.Nil(t, err)
 }
+
+func TestModel_GetAllTag2(t *testing.T) {
+	db, mock, err := GetNewDbMock()
+	if err != nil {
+		t.Errorf("Failed to initialize mock DB: %v", err)
+	}
+
+	mock.MatchExpectationsInOrder(false)
+	mock.ExpectBegin()
+	mock.ExpectQuery(regexp.QuoteMeta(
+		"SELECT `name` FROM `tag` GROUP BY `name`")).
+		WillReturnRows(sqlmock.NewRows([]string{"name"}).
+			AddRow("Google").
+			AddRow("FaceBook"))
+	mock.ExpectCommit()
+
+	m := Model{Db: db}
+	var tags []Tag
+	err = m.GetAllTag(&tags)
+
+	assert.Nil(t, err)
+}
