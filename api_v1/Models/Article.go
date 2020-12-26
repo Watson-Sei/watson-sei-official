@@ -1,7 +1,6 @@
 package Models
 
 import (
-	"fmt"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
@@ -33,9 +32,14 @@ func (m Model) GetArticleByID(article *Article, id uint64) error {
 
 // UpdateArticle ... Update article
 func (m Model) UpdateArticle(article *Article) error {
-	fmt.Println(article)
-	m.Db.Omit("Tags").Save(article)
-	return nil
+	tx := m.Db.Begin()
+	err := tx.Omit("Tags").Save(article).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
+	return err
 }
 
 // DeleteArticle ... Delete article

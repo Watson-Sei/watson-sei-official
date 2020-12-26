@@ -114,3 +114,23 @@ func TestModel_CreateArticle(t *testing.T) {
 
 	assert.Nil(t, err)
 }
+
+func TestModel_UpdateArticle(t *testing.T) {
+	db, mock, err := GetNewDbMock()
+	if err != nil {
+		t.Errorf("Failed to initialize mock DB: %v", err)
+	}
+
+	mock.MatchExpectationsInOrder(false)
+	mock.ExpectBegin()
+
+	mock.ExpectExec(regexp.QuoteMeta(
+		"UPDATE `article`")).
+		WillReturnResult(sqlmock.NewResult(1,1))
+	mock.ExpectCommit()
+
+	m := Model{Db: db}
+	err = m.UpdateArticle(&Article{ID: 1, Title: "Google Title", Overview: "Google Overview", Text: "Google Text", CreatedAt: time.Now()})
+
+	assert.Nil(t, err)
+}
