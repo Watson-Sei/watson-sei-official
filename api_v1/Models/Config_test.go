@@ -88,4 +88,6 @@ func TestModel_GetArticleByID(t *testing.T) {
 	var article Article
 	err = m.GetArticleByID(&article, 1)
 
+	assert.Nil(t, err)
+	assert.Equal(t, Article{ID: 1, Title: "Google Title", Overview: "Google Overview", Text: "Google Text", Tags: []Tag{{Name: "Google", ArticleID: 1}}, CreatedAt: createTime}, article)
 }
