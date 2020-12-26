@@ -61,8 +61,11 @@ func (m Model) GetAllTag(tag *[]Tag) error {
 
 // 特定タグの記事一覧
 func (m Model) GetArticleByTag(article *[]Article, tagParam string) error {
-	if err = m.Db.Joins("inner join tag on article.id = tag.article_id").Where("tag.name = ?", tagParam).Preload("Tags").Find(&article).Error; err != nil {
+	tx := m.Db.Preload("Tags").Begin()
+	if err = tx.Joins("inner join tag on article.id = tag.article_id").Where("tag.name = ?", tagParam).Preload("Tags").Find(&article).Error; err != nil {
+		tx.Rollback()
 		return err
 	}
-	return nil
+	tx.Commit()
+	return err
 }

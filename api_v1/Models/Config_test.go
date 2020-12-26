@@ -28,7 +28,7 @@ func GetNewDbMock() (*gorm.DB, sqlmock.Sqlmock, error) {
 	return gormDB, mock, err
 }
 
-func TestModel_GetAllTag(t *testing.T) {
+func TestModel_GetAllArticle(t *testing.T) {
 	db, mock, err := GetNewDbMock()
 	if err != nil {
 		t.Errorf("Failed to initialize mock DB: %v", err)
@@ -180,6 +180,35 @@ func TestModel_GetAllTag2(t *testing.T) {
 	m := Model{Db: db}
 	var tags []Tag
 	err = m.GetAllTag(&tags)
+
+	assert.Nil(t, err)
+}
+
+func TestModel_GetArticleByTag(t *testing.T) {
+	db, mock, err := GetNewDbMock()
+	if err != nil {
+		t.Errorf("Failed to initialize mock DB: %v", err)
+	}
+
+	createTime := time.Now()
+
+	mock.MatchExpectationsInOrder(false)
+	mock.ExpectBegin()
+	mock.ExpectQuery(regexp.QuoteMeta(
+		"SELECT * FROM `tag` WHERE `tag`.`article_id` = ?")).
+		WithArgs(1).
+		WillReturnRows(sqlmock.NewRows([]string{"name","article_id"}).
+			AddRow("Google", 1))
+	mock.ExpectQuery(regexp.QuoteMeta(
+		"SELECT `article`.`id`,`article`.`title`,`article`.`overview`,`article`.`text`,`article`.`created_at` FROM `article` inner join tag on article.id = tag.article_id WHERE tag.name = ?")).
+		WithArgs("Google").
+		WillReturnRows(sqlmock.NewRows([]string{"id","title","overview","text","create"}).
+			AddRow(1, "Google Title", "Google Overview", "Google Text", createTime))
+	mock.ExpectCommit()
+
+	m := Model{Db: db}
+	var articles []Article
+	err = m.GetArticleByTag(&articles, "Google")
 
 	assert.Nil(t, err)
 }
