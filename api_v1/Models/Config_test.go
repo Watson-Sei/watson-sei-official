@@ -61,3 +61,31 @@ func TestModel_GetAllTag(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, wants, articles)
 }
+
+func TestModel_GetArticleByID(t *testing.T) {
+	db, mock, err := GetNewDbMock()
+	if err != nil {
+		t.Errorf("Failed to initialize mock DB: %v", err)
+	}
+
+	createTime := time.Now()
+
+	mock.MatchExpectationsInOrder(false)
+	mock.ExpectBegin()
+	mock.ExpectQuery(regexp.QuoteMeta(
+		"SELECT * FROM `tag` WHERE `tag`.`article_id` = ?")).
+		WithArgs(1).
+		WillReturnRows(sqlmock.NewRows([]string{"Name","ArticleID"}).
+			AddRow("Google", 1))
+	mock.ExpectQuery(regexp.QuoteMeta(
+		"SELECT * FROM `article` WHERE id = ? ORDER BY `article`.`id` LIMIT 1")).
+		WithArgs(1).
+		WillReturnRows(sqlmock.NewRows([]string{"ID","Title","Overview","Text","CreatedAt"}).
+			AddRow(1, "Google Title", "Google Overview", "Google Text", createTime))
+	mock.ExpectCommit()
+
+	m := Model{Db: db}
+	var article Article
+	err = m.GetArticleByID(&article, 1)
+
+}

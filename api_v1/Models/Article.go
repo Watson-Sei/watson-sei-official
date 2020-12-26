@@ -19,8 +19,9 @@ func (m Model) CreateArticle(article *Article) error {
 }
 
 // GetArticleByID ... Fetch only one article by Id
-func (m Model) GetArticleByID(article *Article, id string) error {
-	err = m.Db.Where("id = ?", id).Preload("Tags").First(article).Error
+func (m Model) GetArticleByID(article *Article, id uint) error {
+	tx := m.Db.Preload("Tags").Begin()
+	err = tx.Where("id = ?", id).First(article).Commit().Error
 	return err
 }
 
