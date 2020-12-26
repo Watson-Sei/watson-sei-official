@@ -7,9 +7,9 @@ var err error
 type ModelInterface interface {
 	GetAllArticle(article *[]Article) error
 	CreateArticle(article *Article) error
-	GetArticleByID(article *Article, id string) error
+	GetArticleByID(article *Article, id uint64) error
 	UpdateArticle(article *Article) error
-	DeleteArticle(article *Article, id string) error
+	DeleteArticle(article *Article, id uint64) error
 	GetAllTag(tag *[]Tag) error
 	GetArticleByTag(article *[]Article, tagParam string) error
 	CreateUser(username string, password string) error

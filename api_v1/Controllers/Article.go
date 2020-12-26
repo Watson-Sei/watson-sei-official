@@ -2,6 +2,7 @@ package Controllers
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Models"
 	"github.com/gin-gonic/gin"
@@ -34,8 +35,9 @@ func (c Controller) CreateArticle(context *gin.Context) {
 // GetArticleByID ... Get the article by id
 func (c Controller) GetArticleByID(context *gin.Context) {
 	id := context.Params.ByName("id")
+	covertedStrUint64, _ := strconv.ParseUint(id, 10, 64)
 	var article Models.Article
-	err := c.Model.GetArticleByID(&article, id)
+	err := c.Model.GetArticleByID(&article, covertedStrUint64)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -47,7 +49,8 @@ func (c Controller) GetArticleByID(context *gin.Context) {
 func (c Controller) UpdateArticle(context *gin.Context) {
 	var article Models.Article
 	id := context.Params.ByName("id")
-	err := c.Model.GetArticleByID(&article, id)
+	covertedStrUint64, _ := strconv.ParseUint(id, 10, 64)
+	err := c.Model.GetArticleByID(&article, covertedStrUint64)
 	if err != nil {
 		context.JSON(http.StatusNotFound, article)
 		return
@@ -65,7 +68,8 @@ func (c Controller) UpdateArticle(context *gin.Context) {
 func (c Controller) DeleteArticle(context *gin.Context) {
 	var article Models.Article
 	id := context.Params.ByName("id")
-	err := c.Model.DeleteArticle(&article, id)
+	covertedStrUint64, _ := strconv.ParseUint(id, 10, 64)
+	err := c.Model.DeleteArticle(&article, covertedStrUint64)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {

@@ -14,12 +14,18 @@ func (m Model) GetAllArticle(article *[]Article) error {
 
 // CreateArticle ... Insert New data
 func (m Model) CreateArticle(article *Article) error {
-	err = m.Db.Create(article).Error
+	tx := m.Db.Begin()
+	err = tx.Create(article).Error
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
 	return err
 }
 
 // GetArticleByID ... Fetch only one article by Id
-func (m Model) GetArticleByID(article *Article, id uint) error {
+func (m Model) GetArticleByID(article *Article, id uint64) error {
 	tx := m.Db.Preload("Tags").Begin()
 	err = tx.Where("id = ?", id).First(article).Commit().Error
 	return err
@@ -33,7 +39,7 @@ func (m Model) UpdateArticle(article *Article) error {
 }
 
 // DeleteArticle ... Delete article
-func (m Model) DeleteArticle(article *Article, id string) error {
+func (m Model) DeleteArticle(article *Article, id uint64) error {
 	var tag Tag
 	m.Db.Where("id = ?", id).Delete(article)
 	m.Db.Where("article_id = ?", id).Delete(tag)

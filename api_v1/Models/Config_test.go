@@ -91,3 +91,26 @@ func TestModel_GetArticleByID(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, Article{ID: 1, Title: "Google Title", Overview: "Google Overview", Text: "Google Text", Tags: []Tag{{Name: "Google", ArticleID: 1}}, CreatedAt: createTime}, article)
 }
+
+func TestModel_CreateArticle(t *testing.T) {
+	db, mock, err := GetNewDbMock()
+	if err != nil {
+		t.Errorf("Failed to initialize mock DB: %v", err)
+	}
+
+	createTime := time.Now()
+
+	mock.MatchExpectationsInOrder(false)
+	mock.ExpectBegin()
+
+	mock.ExpectExec(regexp.QuoteMeta(
+		"INSERT INTO `article` (`title`,`overview`,`text`,`created_at`,`id`) VALUES (?,?,?,?,?)")).
+		WithArgs( "Google Title", "Google Overview", "Google Text", createTime, 1).
+		WillReturnResult(sqlmock.NewResult(1,1))
+	mock.ExpectCommit()
+
+	m := Model{Db: db}
+	err = m.CreateArticle(&Article{ID: 1, Title: "Google Title", Overview: "Google Overview", Text: "Google Text", CreatedAt: createTime})
+
+	assert.Nil(t, err)
+}
