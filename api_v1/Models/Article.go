@@ -7,7 +7,8 @@ import (
 
 // GetAllArticles Fetch all article data
 func (m Model) GetAllArticle(article *[]Article) error {
-	err := m.Db.Preload("Tags").Find(&article).Error
+	tx := m.Db.Preload("Tags").Begin()
+	err = tx.Find(&article).Commit().Error
 	return err
 }
 
