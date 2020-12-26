@@ -134,3 +134,30 @@ func TestModel_UpdateArticle(t *testing.T) {
 
 	assert.Nil(t, err)
 }
+
+func TestModel_DeleteArticle(t *testing.T) {
+	db, mock, err := GetNewDbMock()
+	if err != nil {
+		t.Errorf("Failed to initialize mock DB: %v", err)
+	}
+
+
+	mock.MatchExpectationsInOrder(false)
+	mock.ExpectBegin()
+
+	mock.ExpectExec(regexp.QuoteMeta(
+		"DELETE FROM `article` WHERE id = ?")).
+		WithArgs(1).
+		WillReturnResult(sqlmock.NewResult(1,1))
+	mock.ExpectExec(regexp.QuoteMeta(
+		"DELETE FROM `tag` WHERE article_id = ?")).
+		WithArgs(1).
+		WillReturnResult(sqlmock.NewResult(1,1))
+	mock.ExpectCommit()
+
+	m := Model{Db: db}
+	var article Article
+	err = m.DeleteArticle(&article, 1)
+
+	assert.Nil(t, err)
+}
