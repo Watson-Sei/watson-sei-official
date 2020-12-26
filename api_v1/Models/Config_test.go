@@ -212,3 +212,22 @@ func TestModel_GetArticleByTag(t *testing.T) {
 
 	assert.Nil(t, err)
 }
+
+func TestModel_CreateUser(t *testing.T) {
+	db, mock, err := GetNewDbMock()
+	if err != nil {
+		t.Errorf("Failed to initialize mock DB: %v", err)
+	}
+
+	mock.MatchExpectationsInOrder(false)
+	mock.ExpectBegin()
+	mock.ExpectExec(regexp.QuoteMeta(
+		"INSERT INTO `user` (`username`,`password`)")).
+		WillReturnResult(sqlmock.NewResult(1,1))
+	mock.ExpectCommit()
+
+	m := Model{Db: db}
+	err = m.CreateUser("Username","Password")
+
+	assert.Nil(t, err)
+}

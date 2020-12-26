@@ -11,12 +11,15 @@ import (
 )
 
 func (m Model) CreateUser(username string, password string) error {
+	tx := m.Db.Begin()
 	hash, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
 	// insert処理
-	if err := m.Db.Create(&User{Username: username,Password: string(hash)}).Error; err != nil {
+	if err := tx.Create(&User{Username: username,Password: string(hash)}).Error; err != nil {
+		tx.Rollback()
 		return err
 	}
-	return nil
+	tx.Commit()
+	return err
 }
 
 func (m Model) PasswordChecker(username string, password string) error {
