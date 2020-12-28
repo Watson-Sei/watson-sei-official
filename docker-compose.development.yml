@@ -41,7 +41,7 @@ services:
     depends_on:
       - db
     tty: true
-    command: fresh
+    command: sh ./start_app.sh
 
   # frontend Nuxt.js
   nuxt:

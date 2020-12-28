@@ -7,7 +7,6 @@ import (
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Routes"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
