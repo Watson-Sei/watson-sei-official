@@ -9,7 +9,7 @@ import (
 )
 
 // GetArticle ... Get all article
-func (c Controller) GetArticle(context *gin.Context) {
+func (c GetArticleController) GetArticle(context *gin.Context) {
 	var articles []Models.Article
 	err := c.Model.GetAllArticle(&articles)
 	if err != nil {
