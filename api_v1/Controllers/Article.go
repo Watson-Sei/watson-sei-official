@@ -10,12 +10,11 @@ import (
 
 // GetArticle ... Get all article
 func (c GetArticleController) GetArticle(context *gin.Context) {
-	var articles []Models.Article
-	err := c.Model.GetAllArticle(&articles)
+	ret, err := c.Model.GetAllArticle()
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
-		context.JSON(http.StatusOK, articles)
+		context.JSON(http.StatusOK, ret)
 	}
 }
 

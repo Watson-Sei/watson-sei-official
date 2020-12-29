@@ -50,16 +50,15 @@ func TestModel_GetAllArticle(t *testing.T) {
 	mock.ExpectCommit()
 
 	m := Model{Db: db}
-	var articles []Article
-	err = m.GetAllArticle(&articles)
+	ret, err := m.GetAllArticle()
 
 	// 比べるためのデータ作成処理
 	var wants []Article
 	wants = append(wants, Article{ID: 1, Title: "Google Title", Overview: "Google Overview", Text: "Google Text", Tags: []Tag{{Name: "Google", ArticleID: 1}}, CreatedAt: createTime})
 
-	//
+	// assert
 	assert.Nil(t, err)
-	assert.Equal(t, wants, articles)
+	assert.Equal(t, ret, &wants)
 }
 
 func TestModel_GetArticleByID(t *testing.T) {

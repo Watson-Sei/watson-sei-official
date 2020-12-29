@@ -5,10 +5,16 @@ import (
 )
 
 // GetAllArticles Fetch all article data
-func (m Model) GetAllArticle(article *[]Article) error {
+func (m Model) GetAllArticle() (*[]Article, error) {
+	var article []Article
 	tx := m.Db.Preload("Tags").Begin()
-	err = tx.Find(&article).Commit().Error
-	return err
+	err = tx.Find(&article).Error
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+	tx.Commit()
+	return &article, err
 }
 
 // CreateArticle ... Insert New data

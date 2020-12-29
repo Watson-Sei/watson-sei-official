@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Config"
-	"github.com/Watson-Sei/watson-sei-official/api_v1/Controllers"
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Models"
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Routes"
 	"github.com/gin-gonic/contrib/static"
@@ -31,7 +30,7 @@ func main() {
 	// Model *gorm.DB
 	controller := Models.Model{Db: db}
 
-	router := Routes.SetupRouter(Controllers.Controller{Model: controller})
+	router := Routes.SetupRouter(controller)
 	// Static Server
 	router.Use(static.Serve("/assets", static.LocalFile("./assets", true)))
 	// running
