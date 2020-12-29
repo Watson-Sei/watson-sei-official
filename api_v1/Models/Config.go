@@ -17,6 +17,10 @@ type ModelInterface interface {
 	RefreshJWTToken(userId uint, token string, exp int64) (map[string]string, error)
 }
 
+type ModelInterfaceForGetArticle interface {
+	GetAllArticle(article *[]Article) error
+}
+
 type Model struct {
 	Db *gorm.DB
 }
