@@ -17,3 +17,5 @@ ssl
 # static server
 api_v1/assets
 docker/front/config
+
+pkg

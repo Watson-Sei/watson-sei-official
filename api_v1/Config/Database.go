@@ -2,11 +2,8 @@ package Config
 
 import (
 	"fmt"
-	"log"
+	"gorm.io/gorm"
 	"os"
-	"time"
-
-	"github.com/jinzhu/gorm"
 )
 
 var DB *gorm.DB
@@ -39,19 +36,4 @@ func DBUrl(dbConfig *DBConfig) string {
 		dbConfig.Host,
 		dbConfig.DBName,
 	)
-}
-
-func DBConnect() *gorm.DB {
-	db, err := gorm.Open("mysql", DBUrl(BuildDBConfig()))
-	if err != nil {
-		log.Println("Not ready, Retry connecting...")
-		time.Sleep(time.Second)
-		count++
-		log.Println(count)
-		if count > 30 {
-			panic(err)
-		}
-		return DBConnect()
-	}
-	return db
 }

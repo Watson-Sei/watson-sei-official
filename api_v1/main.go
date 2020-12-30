@@ -6,19 +6,31 @@ import (
 	"github.com/Watson-Sei/watson-sei-official/api_v1/Routes"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
-
-var err error
 
 func main() {
 	gin.SetMode(gin.DebugMode)
-	db := Config.DBConnect()
-	defer db.Close()
+
+	db, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: Config.DBUrl(Config.BuildDBConfig()),
+		SkipInitializeWithVersion: true,
+	}), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+	// v2になってからClose対処
+	sqlDB, err := db.DB()
+	defer sqlDB.Close()
+
 	// Migrate
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&Models.Article{}, &Models.User{}, &Models.Tag{})
 
-	router := Routes.SetupRouter()
+	// Model *gorm.DB
+	controller := Models.Model{Db: db}
+
+	router := Routes.SetupRouter(controller)
 	// Static Server
 	router.Use(static.Serve("/assets", static.LocalFile("./assets", true)))
 	// running

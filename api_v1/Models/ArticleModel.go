@@ -3,7 +3,7 @@ package Models
 import "time"
 
 type Article struct {
-	ID 			uint		`gorm:"primaryKey;AUTO_INCREMENT;not null;" json:"id"`
+	ID 			uint64		`gorm:"primaryKey;AUTO_INCREMENT;not null;" json:"id"`
 	Title		string		`gorm:"size:50;not null;" json:"title"`
 	Overview	string		`gorm:"size:90;" json:"overview"`
 	Text 		string		`gorm:"type: Text;" json:"text"`
@@ -13,7 +13,7 @@ type Article struct {
 
 type Tag struct {
 	Name 		string
-	ArticleID	uint
+	ArticleID	uint64
 }
 
 func (b *Article) TableName() string {
@@ -23,5 +23,3 @@ func (b *Article) TableName() string {
 func (b *Tag) TableName() string {
 	return "tag"
 }
-
-

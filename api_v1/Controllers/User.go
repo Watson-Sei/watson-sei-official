@@ -8,13 +8,13 @@ import (
 )
 
 // ユーザー登録
-func SignupPost(context *gin.Context)  {
+func (c Controller) SignupPost(context *gin.Context)  {
 	var user Models.User
 	if err := context.Bind(&user); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
 		return
 	} else {
-		err := Models.CreateUser(user.Username, user.Password)
+		err := c.Model.CreateUser(user.Username, user.Password)
 		if err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"err":err})
 			return
@@ -25,13 +25,13 @@ func SignupPost(context *gin.Context)  {
 }
 
 // ログイン関数
-func LoginPost(context *gin.Context)  {
+func (c Controller) LoginPost(context *gin.Context)  {
 	var user Models.User
 	if err := context.Bind(&user); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
 		return
 	} else {
-		if err := Models.PasswordChecker(user.Username, user.Password); err != nil {
+		if err := c.Model.PasswordChecker(user.Username, user.Password); err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"err":err})
 			return
 		}
@@ -58,11 +58,11 @@ func LogoutPost(context *gin.Context)  {
 }
 
 // Token Refresh
-func RefreshGet(context *gin.Context)  {
+func (c Controller) RefreshGet(context *gin.Context)  {
 	userId := context.MustGet("userId").(float64)
 	refreshToken := context.MustGet("refreshToken").(string)
 	exp := context.MustGet("exp").(float64)
-	tokens, err := Models.RefreshJWTToken(uint(userId), refreshToken, int64(exp))
+	tokens, err := c.Model.RefreshJWTToken(uint(userId), refreshToken, int64(exp))
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
 		context.Abort()
