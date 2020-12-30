@@ -41,7 +41,7 @@ services:
     depends_on:
       - db
     tty: true
-    command: command: sh ./start_app.sh
+    command: sh ./start_app.sh
 
   # frontend Nuxt.js
   nuxt:
@@ -72,3 +72,5 @@ services:
       - 443:443
     environment:
       TZ: 'Asia/Tokyo'
+    volumes:
+    - /etc/letsencrypt:/etc/letsencrypt
