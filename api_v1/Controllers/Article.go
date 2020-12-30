@@ -19,15 +19,18 @@ func (c GetArticleController) GetArticle(context *gin.Context) {
 }
 
 // CreateArticle ... Create all article
-func (c Controller) CreateArticle(context *gin.Context) {
+func (c CreateArticleController) CreateArticle(context *gin.Context) {
 	var article Models.Article
-	context.BindJSON(&article)
+	if err := context.BindJSON(&article); err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest"})
+		return
+	}
 	err := c.Model.CreateArticle(&article)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"err":err})
 		return
 	} else {
-		context.JSON(http.StatusOK, article)
+		context.JSON(http.StatusOK, gin.H{})
 	}
 }
 

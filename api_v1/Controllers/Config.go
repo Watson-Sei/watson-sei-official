@@ -11,3 +11,7 @@ type Controller struct {
 type GetArticleController struct {
 	Model Models.ModelInterfaceForGetArticle
 }
+
+type CreateArticleController struct {
+	Model Models.ModelInterfaceForCreateArticle
+}
