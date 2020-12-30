@@ -55,10 +55,9 @@ func (m Model) UpdateArticle(article *Article) error {
 }
 
 // DeleteArticle ... Delete article
-func (m Model) DeleteArticle(article *Article, id uint64) error {
-	var tag Tag
-	m.Db.Where("id = ?", id).Delete(article)
-	m.Db.Where("article_id = ?", id).Delete(tag)
+func (m Model) DeleteArticle(id uint64) error {
+	m.Db.Where("id = ?", id).Delete(&Article{})
+	m.Db.Where("article_id = ?", id).Delete(&Tag{})
 	return nil
 }
 

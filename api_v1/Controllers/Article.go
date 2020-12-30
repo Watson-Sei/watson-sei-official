@@ -70,11 +70,10 @@ func (c UpdateArticleController) UpdateArticle(context *gin.Context) {
 }
 
 // DeleteArticle ... Delete the article
-func (c Controller) DeleteArticle(context *gin.Context) {
-	var article Models.Article
+func (c DeleteArticleController) DeleteArticle(context *gin.Context) {
 	id := context.Params.ByName("id")
 	covertedStrUint64, _ := strconv.ParseUint(id, 10, 64)
-	err := c.Model.DeleteArticle(&article, covertedStrUint64)
+	err := c.Model.DeleteArticle(covertedStrUint64)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {

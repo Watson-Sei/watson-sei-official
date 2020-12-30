@@ -23,3 +23,7 @@ type GetArticleByIdController struct {
 type UpdateArticleController struct {
 	Model Models.ModelInterfaceForUpdateArticle
 }
+
+type DeleteArticleController struct {
+	Model Models.ModelInterfaceForDeleteArticle
+}

@@ -136,3 +136,19 @@ func TestUpdateArticleController_UpdateArticle(t *testing.T) {
 	err = controller.Model.UpdateArticle(ret)
 	assert.Nil(t, err)
 }
+
+func (m *ModelMock) DeleteArticle(id uint64) error {
+	args := m.Called(id)
+	return args.Error(0)
+}
+
+func TestDeleteArticleController_DeleteArticle(t *testing.T) {
+
+	modelMock := new(ModelMock)
+	modelMock.On("DeleteArticle", uint64(1)).Return(nil)
+
+	controller := DeleteArticleController{Model: modelMock}
+
+	err := controller.Model.DeleteArticle(uint64(1))
+	assert.Nil(t,err)
+}

@@ -155,8 +155,7 @@ func TestModel_DeleteArticle(t *testing.T) {
 	mock.ExpectCommit()
 
 	m := Model{Db: db}
-	var article Article
-	err = m.DeleteArticle(&article, 1)
+	err = m.DeleteArticle(1)
 
 	assert.Nil(t, err)
 }
