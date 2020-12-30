@@ -31,8 +31,8 @@ func SetupRouter(controller Models.Model) *gin.Engine {
 	{
 		v1.GET("/article/list", Controllers.GetArticleController{Model: controller}.GetArticle)
 		v1.POST("/article/create", Middleware.JWTChecker(), Controllers.CreateArticleController{Model: controller}.CreateArticle)
-		v1.GET("/article/detail/:id", Controllers.Controller{Model: controller}.GetArticleByID)
-		v1.PUT("/article/update/:id", Middleware.JWTChecker(), Controllers.Controller{Model: controller}.UpdateArticle)
+		v1.GET("/article/detail/:id", Controllers.GetArticleByIdController{Model: controller}.GetArticleById)
+		v1.PUT("/article/update/:id", Middleware.JWTChecker(), Controllers.UpdateArticleController{Model: controller}.UpdateArticle)
 		v1.DELETE("/article/delete/:id", Middleware.JWTChecker(), Controllers.Controller{Model: controller}.DeleteArticle)
 		v1.GET("/article/tags", Controllers.Controller{Model: controller}.GetAllTag)
 		v1.GET("/article/tags/:tag", Controllers.Controller{Model: controller}.GetArticleByTag)

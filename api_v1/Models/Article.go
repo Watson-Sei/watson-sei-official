@@ -30,10 +30,16 @@ func (m Model) CreateArticle(article *Article) error {
 }
 
 // GetArticleByID ... Fetch only one article by Id
-func (m Model) GetArticleByID(article *Article, id uint64) error {
+func (m Model) GetArticleById(id uint64) (*Article, error) {
+	var article Article
 	tx := m.Db.Preload("Tags").Begin()
-	err = tx.Where("id = ?", id).First(article).Commit().Error
-	return err
+	err = tx.Where("id = ?", id).First(&article).Error
+	if err != nil {
+		tx.Rollback()
+		return &article, err
+	}
+	tx.Commit()
+	return &article, err
 }
 
 // UpdateArticle ... Update article

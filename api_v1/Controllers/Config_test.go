@@ -93,5 +93,46 @@ func TestCreateArticleController_CreateArticle(t *testing.T) {
 	controller.CreateArticle(context)
 
 	assert.Equal(t, 200, response.Code)
+}
 
+func (m *ModelMock) GetArticleById(id uint64) (*Models.Article, error) {
+	args := m.Called(id)
+	return args.Get(0).(*Models.Article), args.Error(1)
+}
+
+// CreateTextContextの場合だと問題が起こる
+func TestGetArticleByIdController_GetArticleByID(t *testing.T) {
+	jst, _ := time.LoadLocation("Asia/Tokyo")
+	createTime := time.Now().In(jst)
+	sample := &Models.Article{ID: uint64(1), Title: "Google Title", Overview: "Google Overview", Text: "Google Text", CreatedAt: createTime}
+	modelMock := new(ModelMock)
+	modelMock.On("GetArticleById", uint64(1)).Return(sample, nil)
+
+	controller := GetArticleByIdController{Model: modelMock}
+
+	ret, err := controller.Model.GetArticleById(1)
+	assert.Nil(t, err)
+	assert.NotNil(t, ret)
+}
+
+func (m *ModelMock) UpdateArticle(article *Models.Article) error {
+	args := m.Called(article)
+	return args.Error(0)
+}
+
+func TestUpdateArticleController_UpdateArticle(t *testing.T) {
+	jst, _ := time.LoadLocation("Asia/Tokyo")
+	createTime := time.Now().In(jst)
+	sample := &Models.Article{ID: uint64(1), Title: "Google Title", Overview: "Google Overview", Text: "Google Text", CreatedAt: createTime}
+	modelMock := new(ModelMock)
+	modelMock.On("GetArticleById", uint64(1)).Return(sample, nil)
+	modelMock.On("UpdateArticle", sample).Return(nil)
+
+	controller := UpdateArticleController{Model: modelMock}
+
+	ret, err := controller.Model.GetArticleById(uint64(1))
+	assert.Nil(t, err)
+	ret.Title = "Google21"
+	err = controller.Model.UpdateArticle(ret)
+	assert.Nil(t, err)
 }

@@ -5,8 +5,6 @@ import "gorm.io/gorm"
 var err error
 
 type ModelInterface interface {
-	GetArticleByID(article *Article, id uint64) error
-	UpdateArticle(article *Article) error
 	DeleteArticle(article *Article, id uint64) error
 	GetAllTag(tag *[]Tag) error
 	GetArticleByTag(article *[]Article, tagParam string) error
@@ -21,6 +19,15 @@ type ModelInterfaceForGetArticle interface {
 
 type ModelInterfaceForCreateArticle interface {
 	CreateArticle(article *Article) error
+}
+
+type ModelInterfaceForGetArticleById interface {
+	GetArticleById(id uint64) (*Article, error)
+}
+
+type ModelInterfaceForUpdateArticle interface {
+	GetArticleById(id uint64) (*Article, error)
+	UpdateArticle(article *Article) error
 }
 
 type Model struct {

@@ -61,7 +61,7 @@ func TestModel_GetAllArticle(t *testing.T) {
 	assert.Equal(t, ret, &wants)
 }
 
-func TestModel_GetArticleByID(t *testing.T) {
+func TestModel_GetArticleById(t *testing.T) {
 	db, mock, err := GetNewDbMock()
 	if err != nil {
 		t.Errorf("Failed to initialize mock DB: %v", err)
@@ -84,11 +84,11 @@ func TestModel_GetArticleByID(t *testing.T) {
 	mock.ExpectCommit()
 
 	m := Model{Db: db}
-	var article Article
-	err = m.GetArticleByID(&article, 1)
+	//var article Article
+	ret, err := m.GetArticleById( 1)
 
 	assert.Nil(t, err)
-	assert.Equal(t, Article{ID: 1, Title: "Google Title", Overview: "Google Overview", Text: "Google Text", Tags: []Tag{{Name: "Google", ArticleID: 1}}, CreatedAt: createTime}, article)
+	assert.Equal(t, &Article{ID: 1, Title: "Google Title", Overview: "Google Overview", Text: "Google Text", Tags: []Tag{{Name: "Google", ArticleID: 1}}, CreatedAt: createTime}, ret)
 }
 
 func TestModel_CreateArticle(t *testing.T) {

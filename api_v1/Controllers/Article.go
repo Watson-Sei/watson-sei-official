@@ -35,34 +35,37 @@ func (c CreateArticleController) CreateArticle(context *gin.Context) {
 }
 
 // GetArticleByID ... Get the article by id
-func (c Controller) GetArticleByID(context *gin.Context) {
+func (c GetArticleByIdController) GetArticleById(context *gin.Context) {
 	id := context.Params.ByName("id")
 	covertedStrUint64, _ := strconv.ParseUint(id, 10, 64)
-	var article Models.Article
-	err := c.Model.GetArticleByID(&article, covertedStrUint64)
+	ret, err := c.Model.GetArticleById(covertedStrUint64)
 	if err != nil {
-		context.AbortWithStatus(http.StatusNotFound)
+		context.JSON(http.StatusBadRequest, gin.H{"err": err})
+		context.Abort()
 	} else {
-		context.JSON(http.StatusOK, article)
+		context.JSON(http.StatusOK, ret)
 	}
 }
 
 // UpdateArticle ... Update the article information
-func (c Controller) UpdateArticle(context *gin.Context) {
+func (c UpdateArticleController) UpdateArticle(context *gin.Context) {
 	var article Models.Article
 	id := context.Params.ByName("id")
 	covertedStrUint64, _ := strconv.ParseUint(id, 10, 64)
-	err := c.Model.GetArticleByID(&article, covertedStrUint64)
+	ret, err := c.Model.GetArticleById(covertedStrUint64)
 	if err != nil {
-		context.JSON(http.StatusNotFound, article)
+		context.JSON(http.StatusNotFound, gin.H{"err": err})
 		return
 	}
 	context.BindJSON(&article)
-	err = c.Model.UpdateArticle(&article)
+	ret.Title = article.Title
+	ret.Overview = article.Overview
+	ret.Text = article.Text
+	err = c.Model.UpdateArticle(ret)
 	if err != nil {
 		context.AbortWithStatus(http.StatusNotFound)
 	} else {
-		context.JSON(http.StatusOK, article)
+		context.JSON(http.StatusOK, ret)
 	}
 }
 

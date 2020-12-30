@@ -15,3 +15,11 @@ type GetArticleController struct {
 type CreateArticleController struct {
 	Model Models.ModelInterfaceForCreateArticle
 }
+
+type GetArticleByIdController struct {
+	Model Models.ModelInterfaceForGetArticleById
+}
+
+type UpdateArticleController struct {
+	Model Models.ModelInterfaceForUpdateArticle
+}
