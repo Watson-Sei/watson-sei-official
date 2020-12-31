@@ -50,6 +50,8 @@ services:
       dockerfile: ./docker/front/Dockerfile
     ports:
       - 3000:3000
+    environment:
+      - NODE_OPTIONS=--max_old_space_size=2048
     volumes:
       - ./docker/front:/app
       - /app/node_modules
