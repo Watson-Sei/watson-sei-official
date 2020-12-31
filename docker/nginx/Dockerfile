@@ -7,4 +7,3 @@ ADD ./etc/nginx/dev.conf /etc/nginx/default.conf
 
 FROM base_stage AS prod_stage
 ADD ./etc/nginx/prod.conf /etc/nginx/default.conf
-ADD /etc/letsencrypt /etc/nginx/ssl
