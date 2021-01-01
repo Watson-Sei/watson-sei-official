@@ -33,7 +33,31 @@
 <script>
 export default {
   name: "about",
-  auth: false
+  auth: false,
+  data() {
+    return {
+      meta: {
+        title: "",
+        description: "",
+        url: "",
+      }
+    }
+  },
+  head() {
+    this.meta.title = "About"
+    this.meta.description = "自己紹介ページです。";
+    this.meta.url = "https://www.watson-sei.tokyo" + this.$route.path;
+    return {
+      title: this.meta.title,
+      meta: [
+        { hid: 'description', name: 'description', content: this.meta.description },
+        { hid: 'og:title', name: 'og:title', content: this.meta.title },
+        { hid: 'og:description', name: 'description', content: this.meta.description },
+        { hid: 'og:type', name: 'og:type', content: 'website'},
+        { hid: 'og.url', name: 'og.url', content: this.meta.url },
+      ]
+    }
+  }
 }
 </script>
 
