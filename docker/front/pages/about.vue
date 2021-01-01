@@ -50,11 +50,11 @@ export default {
     return {
       title: this.meta.title,
       meta: [
-        { hid: 'description', name: 'description', content: this.meta.description },
-        { hid: 'og:title', name: 'og:title', content: this.meta.title },
-        { hid: 'og:description', name: 'description', content: this.meta.description },
-        { hid: 'og:type', name: 'og:type', content: 'website'},
-        { hid: 'og.url', name: 'og.url', content: this.meta.url },
+        { hid: 'description', property: 'description', content: this.meta.description },
+        { hid: 'og:title', property: 'og:title', content: this.meta.title },
+        { hid: 'og:description', property: 'description', content: this.meta.description },
+        { hid: 'og:type', property: 'og:type', content: 'website'},
+        { hid: 'og.url', property: 'og.url', content: this.meta.url },
       ]
     }
   }
