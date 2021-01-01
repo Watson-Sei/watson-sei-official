@@ -53,7 +53,27 @@ export default {
   auth: false,
   data() {
     return {
-      posts: null
+      posts: null,
+      meta: {
+        title: '',
+        description: '',
+        url: ''
+      }
+    }
+  },
+  head() {
+    this.meta.title = 'Tag - ' + this.$route.params.name;
+    this.meta.description = 'タグの詳細ページです。';
+    this.meta.url = 'https://www.watson-sei.tokyo' + this.$route.path;
+    return {
+      title: this.meta.title,
+      meta: [
+        { hid: 'description', name: 'description', content: this.meta.title },
+        { hid: 'og:title', name: 'og:title', content: this.meta.title },
+        { hid: 'og:type', name: 'og:type', content: 'tag' },
+        { hid: 'og:url', name: 'og:url', content: this.meta.url },
+        { hid: 'og:description', name: 'og:description', content: this.meta.description },
+      ]
     }
   },
   mounted() {

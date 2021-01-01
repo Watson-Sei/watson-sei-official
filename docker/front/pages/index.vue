@@ -56,6 +56,29 @@ export default {
   data() {
     return {
       posts: null,
+      meta: {
+        title: "",
+        description: "",
+        type: "",
+        url: "",
+      }
+    }
+  },
+  head() {
+    const path = this.$route.path;
+    this.meta.title = '一覧ページ'
+    this.meta.description = 'ブログサイトの記事を全て表示しています。'
+    this.meta.url = "https://www.watson-sei.tokyo" + path;
+
+    return {
+      title: this.meta.title,
+      meta: [
+        { hid: "description", property: "description", content: this.meta.description},
+        { hid: "og:title", property: "og:title", content: this.meta.title },
+        { hid: "og:description", property: "og:description", content: this.meta.description},
+        { hid: "og:type", property: "og:type", content: "article"},
+        { hid: "og:url", property: "og:url", content: this.meta.url}
+      ]
     }
   },
   mounted() {
