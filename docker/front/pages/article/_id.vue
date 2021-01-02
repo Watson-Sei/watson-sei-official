@@ -22,10 +22,10 @@ export default {
   head() {
     this.meta.url = "https://www.watson-sei.tokyo" + this.$route.path;
     return {
-      title: this.articleTitle,
+      title: this.meta.title,
       meta: [
         { hid: 'description', property: 'description', content: this.meta.overview },
-        { hid: 'og:title', property: 'og:title', content: this.articleTitle },
+        { hid: 'og:title', property: 'og:title', content: this.meta.title },
         { hid: 'og:type', property: 'og:type', content: 'article'},
         { hid: 'og:url', property: 'og:url', content: this.meta.url },
         { hid: 'og:description', property: 'og:description', content: this.meta.overview }
@@ -37,6 +37,7 @@ export default {
     .then(res => {
       this.articleTitle = res.data.title
       this.articleText = res.data.text
+      this.meta.title = res.data.title
       this.meta.overview = res.data.overview
     })
     .catch(err => {

@@ -19,6 +19,9 @@ export default {
   */
   head: {
     // title: process.env.npm_package_name || '',
+    htmlAttrs: {
+      prefix: 'og: http://ogp.me/ns#'
+    },
     title: "watson-sei-blog",
     meta: [
       { charset: 'utf-8' },
