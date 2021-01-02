@@ -20,6 +20,7 @@ export default {
         title: '',
         description: '',
         url: '',
+        keywords: ''
       }
     }
   },
@@ -30,11 +31,15 @@ export default {
     return {
       title: this.meta.title,
       meta: [
-        { hid: 'description', property: 'description', content: this.meta.description },
+        { hid: 'description', name: 'description', content: this.meta.description },
+        { hid: 'keywords', name: 'keywords', content: this.meta.keywords },
         { hid: 'og:title', property: 'og:title', content: this.meta.title },
         { hid: 'og:type', property: 'og:type', content: 'tag' },
         { hid: 'og:url', property: 'og:url', content: this.meta.url },
-        { hid: 'og:description', property: 'og:description', content: this.meta.description }
+        { hid: 'og:description', property: 'og:description', content: this.meta.description },
+        { hid: "twitter:title", property: "twitter:title", content: this.meta.title },
+        { hid: "twitter:description", property: "twitter:description", content: this.meta.description },
+        { hid: "twitter:image", property: "twitter:image", content: "https://cdn.vuetifyjs.com/images/cards/docks.jpg"},
       ]
     }
   },
@@ -42,6 +47,9 @@ export default {
     this.$axios.get(`${process.env.API}/v1/article/tags`)
     .then(res => {
       this.tags = res.data
+      for(let i = 0; i < this.tags.length; i++) {
+        this.meta.keywords += this.tags[i].Name + ","
+      }
     })
     .catch(err => {
       console.log(err)
