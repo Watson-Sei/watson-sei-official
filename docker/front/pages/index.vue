@@ -73,11 +73,15 @@ export default {
     return {
       title: this.meta.title,
       meta: [
-        { hid: "description", property: "description", content: this.meta.description},
+        { hid: "description", name: "description", content: this.meta.description },
+        { hid: "keywords", name: "keywords", content: "watson-sei, blog, programming"},
         { hid: "og:title", property: "og:title", content: this.meta.title },
-        { hid: "og:description", property: "og:description", content: this.meta.description},
+        { hid: "og:description", property: "og:description", content: this.meta.description },
         { hid: "og:type", property: "og:type", content: "article"},
-        { hid: "og:url", property: "og:url", content: this.meta.url}
+        { hid: "og:url", property: "og:url", content: this.meta.url},
+        { hid: "twitter:title", property: "twitter:title", content: this.meta.title },
+        { hid: "twitter:description", property: "twitter:description", content: this.meta.description },
+        { hid: "twitter:image", property: "twitter:image", content: "https://cdn.vuetifyjs.com/images/cards/docks.jpg"},
       ]
     }
   },
