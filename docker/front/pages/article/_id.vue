@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <h1 style="text-align: center">{{ articleTitle }}</h1>
-    <v-md-preview :text="articleText"></v-md-preview>
+    <h1 style="text-align: center">{{ post.title }}</h1>
+    <v-md-preview :text="post.text"></v-md-preview>
   </v-container>
 </template>
 
@@ -10,18 +10,21 @@ export default {
   auth: false,
   data() {
     return {
-      articleTitle: '',
-      articleText: '',
       meta: {
         title: '',
         overview: '',
-        url: '',
-        tag: ''
+        tag: '',
+        url: ''
       }
     }
   },
   head() {
+    this.meta.title = this.post.title;
+    this.meta.overview = this.post.overview;
     this.meta.url = "https://www.watson-sei.tokyo" + this.$route.path;
+    for(let i = 0; i < this.post.tags.length; i++) {
+      this.meta.tag += this.post.tags[i].Name + ","
+    };
     return {
       title: this.meta.title,
       meta: [
@@ -37,21 +40,10 @@ export default {
       ]
     }
   },
-  mounted() {
-    this.$axios.get(`${process.env.API}/v1/article/detail/` + this.$route.params.id)
-    .then(res => {
-      this.articleTitle = res.data.title
-      this.articleText = res.data.text
-      this.meta.title = res.data.title
-      this.meta.overview = res.data.overview
-      for(let i = 0; i < res.data.tags.length; i++) {
-        this.meta.tag += res.data.tags[i].Name + ","
-      }
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }
+  async asyncData(context) {
+    const { data } = await context.$axios.get(`/v1/article/detail/${context.params.id}`);
+    return {post: data}
+  },
 }
 </script>
 

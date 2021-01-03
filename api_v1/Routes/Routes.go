@@ -12,7 +12,7 @@ import (
 func SetupRouter(controller Models.Model) *gin.Engine {
 	router := gin.Default()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"https://localhost", "http://localhost:3000", "https://www.watson-sei.tokyo"},
+		AllowOrigins: []string{"http://localhost", "http://localhost:3000", "https://www.watson-sei.tokyo"},
 		AllowMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
 		AllowHeaders: []string{
 			"Access-Control-Allow-Headers",

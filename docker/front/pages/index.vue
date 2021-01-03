@@ -40,7 +40,8 @@
       <v-card-actions>
         <v-btn
           color="green lighten-1"
-          :href="`/article/` + post.id"
+          :to="`/article/` + post.id"
+          nuxt
         >
           記事を読む
         </v-btn>
@@ -86,7 +87,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get(`${process.env.API}/v1/article/list`)
+    this.$axios.get(`/v1/article/list`)
     .then(res => {
       this.posts = res.data.reverse()
     })

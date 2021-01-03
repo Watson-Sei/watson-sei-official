@@ -1,6 +1,6 @@
 const enviroment = process.env.NODE_ENV
 require('dotenv').config({path: `config/.env.${enviroment}`})
-const { API,BASE_URL } = process.env
+const { API_URL, API_URL_BROWSER,BASE_URL } = process.env
 console.log('Nuxtjs ENV:',process.env.NODE_ENV)
 export default {
   /*
@@ -76,7 +76,8 @@ export default {
   build: {
   },
   axios: {
-    baseURL: process.env.API
+    baseURL: process.env.API_URL,
+    browserBaseURL: process.env.API_URL_BROWSER
   },
   auth: {
     redirect: {
@@ -107,7 +108,8 @@ export default {
     middleware: ['auth']
   },
   env: {
-    API,
+    API_URL,
+    API_URL_BROWSER,
     BASE_URL
   }
 }

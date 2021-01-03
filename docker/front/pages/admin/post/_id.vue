@@ -42,7 +42,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.$get(`${process.env.API}/v1/article/detail/` + this.$route.params.id)
+    this.$axios.$get(`/v1/article/detail/` + this.$route.params.id)
     .then(res => {
       this.title = res.title
       this.overview = res.overview
@@ -63,7 +63,7 @@ export default {
       params.append('uuid', uuid_v4())
       this.$axios
         .$post(
-          `${process.env.API}/v1/upload/image`,
+          `/v1/upload/image`,
           params,
           {
             headers: {
@@ -76,7 +76,7 @@ export default {
           // これで埋め込む
           insertImage({
             // url: 'https://zukan.pokemon.co.jp/zukan-api/up/images/index/f8d806f32ee833db68f00e2c50b136be.png',
-            url: `${process.env.API}/` + response.url,
+            url: `${process.env.BASE_URL}/api/` + response.url,
             desc: 'desc',
           });
         })
@@ -85,7 +85,7 @@ export default {
         })
     },
     articleUpdate: async function () {
-      this.$axios.$put(`${process.env.API}/v1/article/update/` + this.$route.params.id, {
+      this.$axios.$put(`/v1/article/update/` + this.$route.params.id, {
         title: this.title,
         overview: this.overview,
         text: this.text,

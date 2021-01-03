@@ -82,7 +82,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get(`${process.env.API}/v1/article/tags/` + this.$route.params.name)
+    this.$axios.get(`/v1/article/tags/` + this.$route.params.name)
     .then(res => {
       this.posts = res.data
       this.meta.keywords = this.$route.params.name
