@@ -14,8 +14,6 @@ services:
       - 3306
     security_opt:
       - seccomp:unconfined
-    networks:
-      - project_watson_default
 
   # jwt blacklist database
   redis:
@@ -28,8 +26,6 @@ services:
       - 6379:6379
     volumes:
       - ./docker/redis/data:/data
-    networks:
-      - project_watson_default
 
   # Golang
   api:
@@ -46,8 +42,6 @@ services:
       - db
     tty: true
     command: sh ./start_app.sh
-    networks:
-      - project_watson_default
 
   # frontend Nuxt.js
   nuxt:
@@ -64,8 +58,6 @@ services:
     tty: true
     working_dir: /app
     command: yarn run dev
-    networks:
-      - project_watson_default
 
   # Nginx WebServer
   nginx:
@@ -79,10 +71,3 @@ services:
       - 80:80
     environment:
       TZ: 'Asia/Tokyo'
-    networks:
-      - project_watson_default
-
-
-networks:
-  project_watson_default:
-    external: true
