@@ -5,7 +5,7 @@
     absolute
   >
     <div class="footer">
-      Copyright test 2020. All right reserved
+      &copy; Watson-Sei. 2021.
     </div>
   </v-footer>
 </template>
