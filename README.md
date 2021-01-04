@@ -24,6 +24,7 @@ BASE_URL="http://localhost"
 API_URL="http://api:8080"
 API_URL_BROWSER="http://localhost:8080"
 BASE_URL="https://www.domain"
+GA_ID="google analytics"
 ```
 
 

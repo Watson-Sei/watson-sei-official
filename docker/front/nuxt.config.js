@@ -1,6 +1,6 @@
 const enviroment = process.env.NODE_ENV
 require('dotenv').config({path: `config/.env.${enviroment}`})
-const { API_URL, API_URL_BROWSER,BASE_URL } = process.env
+const { API_URL, API_URL_BROWSER,BASE_URL,GA_ID } = process.env
 console.log('Nuxtjs ENV:',process.env.NODE_ENV)
 export default {
   /*
@@ -69,7 +69,11 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/auth-next',
+    '@nuxtjs/google-analytics'
   ],
+  googleAnalytics: {
+    id: GA_ID
+  },
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/
@@ -111,6 +115,7 @@ export default {
   env: {
     API_URL,
     API_URL_BROWSER,
-    BASE_URL
+    BASE_URL,
+    GA_ID,
   }
 }
