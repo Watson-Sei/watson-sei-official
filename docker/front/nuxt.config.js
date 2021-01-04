@@ -26,6 +26,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'og:site_name', property: 'og:site_name', content: 'watson-sei.tokyo'},
       { hid: 'og:image', property: 'og:image', content: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg'},
       { hid: 'twitter:card', name: 'twitter:card', content: 'summary'},
       { hid: 'twitter:site', name: 'twitter:site', content: '@watson_sei'}
