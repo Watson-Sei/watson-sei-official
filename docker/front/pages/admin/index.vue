@@ -91,7 +91,7 @@ export default {
     }
   },
   mounted() {
-    this.$axios.get(`${process.env.API}/v1/article/list`)
+    this.$axios.get(`/v1/article/list`)
       .then(res => {
         this.posts = res.data
       })
@@ -121,7 +121,7 @@ export default {
     },
     deleteItemConfirm () {
       this.$axios.$delete(
-        `${process.env.API}/v1/article/delete/` + this.itemId
+        `/v1/article/delete/` + this.itemId
       )
       .then(res => {
         console.log(res)

@@ -15,13 +15,15 @@ REFRESH_TOKEN_SECRETKEY=wh0+t&#w)tsb7ipvd0^hu@fkzml93dty!_h(o^xz7hmcnvf4#z
 
 ```
 ## /docker/front/config/.env.development
-API="http://localhost/api"
+API_URL="http://api:8080"
+API_URL_BROWSER='http://localhost:8080'
 BASE_URL="http://localhost"
 ```
 ```
 ## /dockr/front/config/.env.production
-API="https://localhost/api"
-BASE_URL="https://localhost"
+API_URL="http://api:8080"
+API_URL_BROWSER="http://localhost:8080"
+BASE_URL="https://www.domain"
 ```
 
 
